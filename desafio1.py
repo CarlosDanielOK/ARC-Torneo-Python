@@ -94,7 +94,7 @@ def diferencia_de_goles(info_equipos,equipo): #Modifica la tabla segun sus datos
     info_equipos[equipo]["diferencia de gol"] = gf - gc
 
 
-def procesar_torneo(partidos):
+def procesar_torneo(partidos): #Genera una tabla y le registra los datos de cada partido
     info_equipos = tabla_de_datos(partidos)
 
     for partido in partidos:
@@ -112,6 +112,18 @@ def procesar_torneo(partidos):
         diferencia_de_goles(info_equipos,equipo)
         
     return info_equipos
+
+def info_determinante(info_equipo): #Devuelve los datos que determinan la clasificacion en una tupla, ordenados de mas a menos importante
+    equipo = info_equipo[0]
+    datos = info_equipo[1]
+    puntos = datos["puntos"]
+    dg = datos["diferencia de gol"]
+    gf = datos["goles a favor"]
+
+    return (puntos,dg,gf,equipo)
+
+def clasificacion (info_equipos): #Convierte el diccionario en una lista de tuplas (equipo,datos) para luego ordenarla segun los factores determinantes
+    return sorted(info_equipos.items(),key=info_determinante,reverse = True)
 
 
 
