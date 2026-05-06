@@ -1,13 +1,33 @@
-def leer_archivo (archivo):
-    with open(archivo, "r") as resultados_grupos:
-        partidos=[]
-        partidos.append((resultados_grupos.readline()).strip()) #separo la cantidad de partidos
-        for linea in resultados_grupos:
-            partidos.append((linea.strip()).split())
-    
-    return partidos
+def leer_archivo(archivo):
+    partidos = []
 
-PARTIDOS=((leer_archivo("/home/agustina/Escritorio/pruebas/archivo.txt")))
+    try:
+        with open(archivo, "r") as resultados_grupos:
+            cant_esperada = int(resultados_grupos.readline().strip())
+
+            for linea in resultados_grupos:
+                partidos.append(linea.strip().split())
+
+        cant_real = len(partidos)
+
+        if cant_real != cant_esperada:
+            raise ValueError(
+                f"Cantidad incorrecta de partidos: esperados {cant_esperada}, encontrados {cant_real}"
+            )
+
+        print("Archivo leido correctamente")
+
+        return partidos
+
+    except FileNotFoundError:
+        raise FileNotFoundError("El archivo no existe")
+
+    except ValueError:
+        raise ValueError("Error en datos del archivo")
+    
+
+
+
 
 def lista_de_ceros(num):
     lista=[]
@@ -16,7 +36,7 @@ def lista_de_ceros(num):
     return lista
 
 def cant_partidos (partidos):
-    cantidad=int(partidos.pop(0))
+    cantidad=int(len(partidos))
     return cantidad
 
 def tabla_de_datos (partidos,cant_datos):
@@ -85,7 +105,22 @@ def desempate (partidos):
 
 #prints de prueba, se pueden sacar
 
-print(PARTIDOS)
-print(cant_partidos(PARTIDOS))
-print(equipos_y_puntos(PARTIDOS))
-print(desempate(PARTIDOS))
+def main():
+    PARTIDOS=[]
+    try:
+        PARTIDOS = leer_archivo("archivo.txt")
+
+    except Exception as e:
+        print("No se pudo continuar:", e)
+
+    print(PARTIDOS)
+
+
+    print(PARTIDOS)
+    print("Cantidad de partidos")
+    print(cant_partidos(PARTIDOS))
+    print("Equipos y puntos")
+    print(equipos_y_puntos(PARTIDOS))
+    print("desempates")
+    print(desempate(PARTIDOS))
+main()
