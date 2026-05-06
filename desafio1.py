@@ -1,3 +1,4 @@
+import re
 def leer_archivo(archivo):
     partidos = []
 
@@ -5,8 +6,14 @@ def leer_archivo(archivo):
         with open(archivo, "r") as resultados_grupos:
             cant_esperada = int(resultados_grupos.readline().strip())
 
+
+            patron = r"^[A-Z]{3} [A-Z]{3} \d+ \d+$"
+
             for linea in resultados_grupos:
-                partidos.append(linea.strip().split())
+                if re.match(patron, linea):
+                    partidos.append(linea.strip().split())
+                else:
+                    raise ValueError("Error en datos del archivo, partidos mal ingresados")
 
         cant_real = len(partidos)
 
@@ -120,12 +127,14 @@ def main():
     try:
         PARTIDOS = leer_archivo("archivo.txt")
 
+        
+        print(PARTIDOS)
+        print("Cantidad de partidos")
+        print(cant_partidos(PARTIDOS))
+        print("Datos del torneo")
+        print(procesar_torneo(PARTIDOS))
     except Exception as e:
         print("No se pudo continuar:", e)
 
-    print(PARTIDOS)
-    print("Cantidad de partidos")
-    print(cant_partidos(PARTIDOS))
-    print("Datos del torneo")
-    print(procesar_torneo(PARTIDOS))
+   
 main()
