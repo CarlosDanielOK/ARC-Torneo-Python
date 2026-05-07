@@ -161,33 +161,6 @@ def diferencia_de_goles(info_equipos, equipo):
     gc = info_equipos[equipo]["goles en contra"]
     info_equipos[equipo]["diferencia de gol"] = gf - gc
 
-def obtener_puntos(item):
-    """
-    Devuelve los puntos para usarlos en el ordenamiento.
-    
-    Args:
-        item (tuple): Tupla donde el segundo elemento es el diccionario de estadísticas.
-    """
-    return item[1]["puntos"]
-
-def ordenar_equipos(equipos):
-    """
-    Ordena los equipos según la cantidad de puntos de mayor a menor.
-
-    Args:
-        equipos (dict): Diccionario con los equipos y sus datos.
-
-    Returns:
-        dict: Nuevo diccionario ordenado.
-    """
-    ordenado = dict(
-        sorted(
-            equipos.items(),
-            key=lambda x: (-x[1]["puntos"], x[0])
-        )
-    )
-    return ordenado
-
 def procesar_torneo(partidos):
     """
     Función principal que genera la tabla, itera sobre los partidos y asienta los puntos y goles.
@@ -215,7 +188,7 @@ def procesar_torneo(partidos):
     for equipo in info_equipos:
         diferencia_de_goles(info_equipos,equipo)
         
-    return ordenar_equipos(info_equipos)
+    return clasificacion(info_equipos)
 
 def info_determinante(info_equipo):
     """
