@@ -26,8 +26,6 @@ def leer_archivo(archivo):
             if cant_esperada != 6:
                 raise ValueError(f"Se esperaban 6 partidos, el archivo indica {cant_esperada}")
 
-
-
             for linea in resultados_grupos:
                 partes = linea.strip().split()
                 
@@ -46,18 +44,11 @@ def leer_archivo(archivo):
                     raise ValueError("Error en datos del archivo, partidos mal ingresados")
                 
                 partidos.append(partes)
-            # patron = r"^([A-Z]{3}) (?!\1)[A-Z]{3} \d+ \d+$"
-            # for linea in resultados_grupos:
-            #     if re.match(patron, linea):
-            #         partidos.append(linea.strip().split())
-            #     else:
-            #         raise ValueError("Error en datos del archivo, partidos mal ingresados")
+
             cant_real = len(partidos)
             if cant_real != cant_esperada:
-                print(cant_real)
-                print (cant_esperada)
                 raise ValueError(
-                    "Cantidad incorrecta de partidos: esperados 6"
+                    "Cantidad incorrecta de partidos: esperados 6 partidos"
                 )
         return partidos
 
