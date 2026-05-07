@@ -190,6 +190,9 @@ def procesar_torneo(partidos):
         
     return clasificacion(info_equipos)
 
+def nombre_equipo(info_equipo):
+    return info_equipo[0]
+
 def info_determinante(info_equipo):
     """
     Retorna los datos clave que determinan la clasificación oficial.
@@ -201,17 +204,14 @@ def info_determinante(info_equipo):
     Returns:
         tuple: (puntos, diferencia de gol, goles a favor, nombre_equipo)
     """
-    equipo = info_equipo[0]
     datos = info_equipo[1]
-    puntos = datos["puntos"]
-    dg = datos["diferencia de gol"]
-    gf = datos["goles a favor"]
 
-    return (puntos,dg,gf,equipo)
+    return (datos["puntos"],datos["diferencia de gol"],datos["goles a favor"])
 
 def clasificacion(info_equipos):
     """
     Ordena completamente los equipos basándose en los factores determinantes (Puntos, DG, GF).
+    EN caso de empate numerico se matendra el primer ordenamiento por nombre alfabeticamente.
 
     Args:
         info_equipos (dict): Diccionario principal con las estadísticas.
@@ -219,7 +219,12 @@ def clasificacion(info_equipos):
     Returns:
         list: Lista de tuplas completamente ordenada de primero a último.
     """
-    return sorted(info_equipos.items(),key=info_determinante,reverse = True)
+    lista_equipos = list(info_equipos.items())
+
+    lista_equipos = sorted(lista_equipos,key = nombre_equipo)
+    lista_equipos = sorted(lista_equipos,key = info_determinante,reverse = True)
+
+    return lista_equipos
 
 
 
@@ -232,34 +237,22 @@ def clasificacion(info_equipos):
 
 def mostrar_resultados(equipos):
     """
-    Imprime en pantalla la lista de los clasificados respetando estrictamente el 
+    Imprime en pantalla los clasificados respetando estrictamente el 
     formato requerido (renglones sin espacios adicionales).
 
     Args:
         equipos (list): Lista de todos los equipos del torneo ordenados.
     """
-    # Extrae solo los nombres de la lista de tuplas (o diccionario)
-    nombres = []
-    for equipo in equipos:
-        if isinstance(equipo, tuple):
-            nombres.append(equipo[0]) # Si es tupla, el nombre está en la primera posición
-        else:
-            nombres.append(equipo)    # Si pasaron una lista de strings o claves de un dict
-
     print("Clasificados:")
-    print(nombres[0])
-    print(nombres[1])
+    print(equipos[0][0])
+    print(equipos[1][0])
     print("Tercero:")
-    print(nombres[2])
+    print(equipos[2][0])
 
 
 def main():
-    PARTIDOS=[]
     try:
-        PARTIDOS = leer_archivo("archivo.txt")
-
-        equipos = list(procesar_torneo(PARTIDOS))
-        mostrar_resultados(equipos)
+        mostrar_resultados(procesar_torneo(leer_archivo("/home/agustina/Escritorio/ARC-Torneo-Python/archivo.txt")))
 
     except Exception as e:
         print("No se pudo continuar:", e)
