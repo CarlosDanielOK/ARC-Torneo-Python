@@ -144,25 +144,30 @@ def clasificacion (info_equipos): #Convierte el diccionario en una lista de tupl
 
 #prints de prueba, se pueden sacar
 
+def mostrar_resultados(equipos): # Recibe la lista de tuplas y muestra la salida final
+    # Extrae solo los nombres de la lista de tuplas (o diccionario)
+    nombres = []
+    for equipo in equipos:
+        if isinstance(equipo, tuple):
+            nombres.append(equipo[0]) # Si es tupla, el nombre está en la primera posición
+        else:
+            nombres.append(equipo)    # Si pasaron una lista de strings o claves de un dict
+
+    print("Clasificados:")
+    print(nombres[0])
+    print(nombres[1])
+    print("Tercero:")
+    print(nombres[2])
+
+
 def main():
     PARTIDOS=[]
     try:
         PARTIDOS = leer_archivo("archivo.txt")
 
-        
-        # print(PARTIDOS)
+        equipos = list(procesar_torneo(PARTIDOS))
+        mostrar_resultados(equipos)
 
-        print("Datos del torneo")
-        equipos=list(procesar_torneo(PARTIDOS))
-        
-        print("Clasificados")
-        print(" ",equipos[0])
-        print(" ",equipos[1])
-        print("Tercero")
-        print(" ",equipos[2])
-        # for clave, valor in equiposAux.items():
-        #     print(clave, valor)
-        #     print(valor["puntos"])
     except Exception as e:
         print("No se pudo continuar:", e)
 
