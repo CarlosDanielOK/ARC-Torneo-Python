@@ -66,7 +66,6 @@ def tabla_de_datos (partidos): #Genera una tabla de datos en ceros
             info_equipos[local] = estadisticas_vacias.copy()
         if visita not in info_equipos:
             info_equipos[visita] = estadisticas_vacias.copy()
-    
     return info_equipos
 
 
@@ -93,6 +92,17 @@ def diferencia_de_goles(info_equipos,equipo): #Modifica la tabla segun sus datos
     gc = info_equipos[equipo]["goles en contra"]
     info_equipos[equipo]["diferencia de gol"] = gf - gc
 
+def obtener_puntos(item):
+    return item[1]["puntos"]
+
+def ordenar_equipos(equipos):
+    ordenado = dict(
+        sorted(
+            equipos.items(),
+            key=lambda x: (-x[1]["puntos"], x[0])
+        )
+    )
+    return ordenado
 
 def procesar_torneo(partidos): #Genera una tabla y le registra los datos de cada partido
     info_equipos = tabla_de_datos(partidos)
@@ -111,7 +121,7 @@ def procesar_torneo(partidos): #Genera una tabla y le registra los datos de cada
     for equipo in info_equipos:
         diferencia_de_goles(info_equipos,equipo)
         
-    return info_equipos
+    return ordenar_equipos(info_equipos)
 
 def info_determinante(info_equipo): #Devuelve los datos que determinan la clasificacion en una tupla, ordenados de mas a menos importante
     equipo = info_equipo[0]
@@ -140,11 +150,19 @@ def main():
         PARTIDOS = leer_archivo("archivo.txt")
 
         
-        print(PARTIDOS)
-        print("Cantidad de partidos")
-        print(cant_partidos(PARTIDOS))
+        # print(PARTIDOS)
+
         print("Datos del torneo")
-        print(procesar_torneo(PARTIDOS))
+        equipos=list(procesar_torneo(PARTIDOS))
+        
+        print("Clasificados")
+        print(" ",equipos[0])
+        print(" ",equipos[1])
+        print("Tercero")
+        print(" ",equipos[2])
+        # for clave, valor in equiposAux.items():
+        #     print(clave, valor)
+        #     print(valor["puntos"])
     except Exception as e:
         print("No se pudo continuar:", e)
 
