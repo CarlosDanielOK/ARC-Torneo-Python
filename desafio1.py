@@ -47,20 +47,6 @@ def leer_archivo(archivo):
         raise ValueError("Error en datos del archivo")
 
 
-
-def cant_partidos(partidos):
-    """
-    Cuenta la cantidad de partidos que se procesaron.
-
-    Args:
-        partidos (list): Lista con los resultados.
-
-    Returns:
-        int: El total de partidos.
-    """
-    cantidad = int(len(partidos))
-    return cantidad
-
 def resultado(goles_local, goles_visita):
     """
     Compara los goles y revela al ganador del partido o si hubo empate.
@@ -78,7 +64,6 @@ def resultado(goles_local, goles_visita):
         return "Visita"
     if goles_local == goles_visita:
         return "Empate"
-
 
 
 def tabla_de_datos(partidos):
@@ -161,6 +146,7 @@ def diferencia_de_goles(info_equipos, equipo):
     gc = info_equipos[equipo]["goles en contra"]
     info_equipos[equipo]["diferencia de gol"] = gf - gc
 
+
 def procesar_torneo(partidos):
     """
     Función principal que genera la tabla, itera sobre los partidos y asienta los puntos y goles.
@@ -190,8 +176,10 @@ def procesar_torneo(partidos):
         
     return clasificacion(info_equipos)
 
+
 def nombre_equipo(info_equipo):
     return info_equipo[0]
+
 
 def info_determinante(info_equipo):
     """
@@ -207,6 +195,7 @@ def info_determinante(info_equipo):
     datos = info_equipo[1]
 
     return (datos["puntos"],datos["diferencia de gol"],datos["goles a favor"])
+
 
 def clasificacion(info_equipos):
     """
@@ -227,14 +216,6 @@ def clasificacion(info_equipos):
     return lista_equipos
 
 
-
-
-
-
-
-
-#prints de prueba, se pueden sacar
-
 def mostrar_resultados(equipos):
     """
     Imprime en pantalla los clasificados respetando estrictamente el 
@@ -252,10 +233,10 @@ def mostrar_resultados(equipos):
 
 def main():
     try:
-        mostrar_resultados(procesar_torneo(leer_archivo("/home/agustina/Escritorio/ARC-Torneo-Python/archivo.txt")))
+        ruta_archivo = input("Ingrese la direccion del archivo: ")
+        mostrar_resultados(procesar_torneo(leer_archivo(ruta_archivo)))
 
     except Exception as e:
         print("No se pudo continuar:", e)
 
-   
 main()
