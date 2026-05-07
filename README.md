@@ -44,5 +44,5 @@ BRA
 ```
 
 ## 🛠 Tecnologías Utilizadas
-- **Python 3.x**
+- **Python**
 - Módulo nativo `re` para validaciones por expresiones regulares.
