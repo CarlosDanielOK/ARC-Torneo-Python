@@ -18,33 +18,51 @@ def leer_archivo(archivo):
 
     try:
         with open(archivo, "r") as resultados_grupos:
-            cant_esperada = int(resultados_grupos.readline().strip())
+            try:
+                cant_esperada = int(resultados_grupos.readline().strip())
+            except ValueError:
+                raise ValueError("La primera línea debe ser la cantidad de partidos")
+
+            if cant_esperada != 6:
+                raise ValueError(f"Se esperaban 6 partidos, el archivo indica {cant_esperada}")
 
 
-            patron = r"^[A-Z]{3} [A-Z]{3} \d+ \d+$"
 
             for linea in resultados_grupos:
-                if re.match(patron, linea):
-                    partidos.append(linea.strip().split())
-                else:
+                partes = linea.strip().split()
+                
+                if len(partes) != 4:
                     raise ValueError("Error en datos del archivo, partidos mal ingresados")
-
-        cant_real = len(partidos)
-
-        if cant_real != cant_esperada:
-            raise ValueError(
-                f"Cantidad incorrecta de partidos: esperados {cant_esperada}, encontrados {cant_real}"
-            )
-
-        print("Archivo leido correctamente")
-
+                local, visitante, goles_local, goles_visitante = partes
+                if local == visitante:
+                    raise ValueError("Equipo local y visitante no deben ser los mismos")
+                if not local.isupper() or len(local) != 3:
+                    raise ValueError("Error en datos del archivo, partidos mal ingresados")
+                
+                if not visitante.isupper() or len(visitante) != 3:
+                    raise ValueError("Error en datos del archivo, partidos mal ingresados")
+                
+                if not goles_local.isdigit() or not goles_visitante.isdigit():
+                    raise ValueError("Error en datos del archivo, partidos mal ingresados")
+                
+                partidos.append(partes)
+            # patron = r"^([A-Z]{3}) (?!\1)[A-Z]{3} \d+ \d+$"
+            # for linea in resultados_grupos:
+            #     if re.match(patron, linea):
+            #         partidos.append(linea.strip().split())
+            #     else:
+            #         raise ValueError("Error en datos del archivo, partidos mal ingresados")
+            cant_real = len(partidos)
+            if cant_real != cant_esperada:
+                print(cant_real)
+                print (cant_esperada)
+                raise ValueError(
+                    "Cantidad incorrecta de partidos: esperados 6"
+                )
         return partidos
 
     except FileNotFoundError:
         raise FileNotFoundError("El archivo no existe")
-
-    except ValueError:
-        raise ValueError("Error en datos del archivo")
 
 
 def resultado(goles_local, goles_visita):
@@ -231,12 +249,22 @@ def mostrar_resultados(equipos):
     print(equipos[2][0])
 
 
-def main():
-    try:
-        ruta_archivo = input("Ingrese la direccion del archivo: ")
-        mostrar_resultados(procesar_torneo(leer_archivo(ruta_archivo)))
+def mensaje_salida():
+    respuesta = input("¿Desea salir? (s/n): ")
+    if respuesta.lower() != "n":
+        print("Saliendo...")
+        return True
+    return False
 
-    except Exception as e:
-        print("No se pudo continuar:", e)
+def main():
+    while True:
+        try:
+            ruta_archivo = input("Ingrese la direccion del archivo: ")
+            mostrar_resultados(procesar_torneo(leer_archivo(ruta_archivo)))
+        except Exception as e:
+            print(f"Error: {e}")
+        
+        if mensaje_salida():
+            break
 
 main()
