@@ -107,7 +107,7 @@ def tabla_de_datos(partidos):
     return info_equipos
 
 
-def partidos_jugados(info_equipo, local, visita):
+def partidos_jugados(info_equipos, local, visita):
     """
     Modifica la tabla de datos sumando 1 por cada partido en el que participe el equipo.
 
@@ -116,8 +116,8 @@ def partidos_jugados(info_equipo, local, visita):
         local (str): Nombre del equipo local.
         visita (str): Nombre del equipo visitante.
     """
-    info_equipo[local]["partidos jugados"] += 1
-    info_equipo[visita]["partidos jugados"] += 1
+    info_equipos[local]["partidos jugados"] += 1
+    info_equipos[visita]["partidos jugados"] += 1
 
 
 def puntos(info_equipos, local, visita, resultado):
