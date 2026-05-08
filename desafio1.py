@@ -96,7 +96,8 @@ def tabla_de_datos(partidos):
             "puntos":0,
             "goles a favor":0,
             "goles en contra":0,
-            "diferencia de gol":0
+            "diferencia de gol":0,
+            "partidos jugados":0
         }
 
         if local not in info_equipos:
@@ -104,6 +105,19 @@ def tabla_de_datos(partidos):
         if visita not in info_equipos:
             info_equipos[visita] = estadisticas_vacias.copy()
     return info_equipos
+
+
+def partidos_jugados(info_equipo, local, visita):
+    """
+    Modifica la tabla de datos sumando 1 por cada partido en el que participe el equipo.
+
+    Args:
+        info_equipos (dict): Diccionario principal con las estadísticas.
+        local (str): Nombre del equipo local.
+        visita (str): Nombre del equipo visitante.
+    """
+    info_equipo[local]["partidos jugados"] += 1
+    info_equipo[visita]["partidos jugados"] += 1
 
 
 def puntos(info_equipos, local, visita, resultado):
@@ -156,39 +170,9 @@ def diferencia_de_goles(info_equipos, equipo):
     info_equipos[equipo]["diferencia de gol"] = gf - gc
 
 
-def procesar_torneo(partidos):
-    """
-    Función principal que genera la tabla, itera sobre los partidos y asienta los puntos y goles.
-    Calcula al final la diferencia de gol y devuelve el diccionario de equipos ordenados.
-
-    Args:
-        partidos (list): Lista de partidos procesada por leer_archivo.
-
-    Returns:
-        dict: Diccionario final ordenado (actualmente por puntos).
-    """
-    info_equipos = tabla_de_datos(partidos)
-
-    for partido in partidos:
-        local = partido[0]
-        visita = partido[1]
-        goles_local = int(partido[2])
-        goles_visita = int(partido[3])
-        res = resultado(goles_local,goles_visita)
-
-        puntos(info_equipos,local,visita,res)
-
-        goles(info_equipos,local,visita,goles_local,goles_visita)
-
-    for equipo in info_equipos:
-        diferencia_de_goles(info_equipos,equipo)
-        
-    return clasificacion(info_equipos)
-
-
 def nombre_equipo(info_equipo):
     """
-    Retorna el nombre del equipo
+    Retorna el nombre del equipo.
 
     Args:
         info_equipo (tuple): Tupla con el nombre del equipo y sus estadísticas.
@@ -218,7 +202,7 @@ def info_determinante(info_equipo):
 def clasificacion(info_equipos):
     """
     Ordena completamente los equipos basándose en los factores determinantes (Puntos, Diferencia de goles, Goles a favor).
-    EN caso de empate numerico se matendra el primer ordenamiento por nombre alfabeticamente.
+    En caso de empate numerico se matendra el primer ordenamiento por nombre alfabeticamente.
 
     Args:
         info_equipos (dict): Diccionario principal con las estadísticas.
@@ -232,6 +216,38 @@ def clasificacion(info_equipos):
     lista_equipos = sorted(lista_equipos,key = info_determinante,reverse = True)
 
     return lista_equipos
+
+
+def procesar_torneo(partidos):
+    """
+    Función principal que genera la tabla, itera sobre los partidos y asienta los puntos y goles.
+    Calcula al final la diferencia de gol y devuelve el diccionario de equipos ordenados.
+
+    Args:
+        partidos (list): Lista de partidos procesada por leer_archivo.
+
+    Returns:
+        dict: Diccionario final ordenado (actualmente por puntos).
+    """
+    info_equipos = tabla_de_datos(partidos)
+
+    for partido in partidos:
+        local = partido[0]
+        visita = partido[1]
+        goles_local = int(partido[2])
+        goles_visita = int(partido[3])
+        res = resultado(goles_local,goles_visita)
+
+        puntos(info_equipos,local,visita,res)
+
+        goles(info_equipos,local,visita,goles_local,goles_visita)
+
+        partidos_jugados(info_equipos,local,visita)
+
+    for equipo in info_equipos:
+        diferencia_de_goles(info_equipos,equipo)
+        
+    return clasificacion(info_equipos)
 
 
 def mostrar_resultados(equipos):
