@@ -24,7 +24,7 @@ def leer_archivo(archivo):
                 raise ValueError("La primera línea debe ser la cantidad de partidos")
 
             if cant_esperada != 6:
-                raise ValueError(f"Se esperaban 6 partidos, el archivo indica {cant_esperada}")
+                raise ValueError(f"Se esperaban 6 partidos, el archivo indica {cant_esperada} partidos")
 
             patron = r"^([A-Z]{3}) (?!\1)[A-Z]{3} (?:[0-9]|1[0-9]|20) (?:[0-9]|1[0-9]|20)$"
             for linea in resultados_grupos:
@@ -32,7 +32,7 @@ def leer_archivo(archivo):
                 if re.match(patron, linea_strip):
                     partidos.append(linea_strip.split())
                 else:
-                    raise ValueError("Error en datos del archivo, partidos mal ingresados")
+                    raise ValueError("Error en datos del archivo, formato de partidos mal ingresados")
 
             cant_real = len(partidos)
             if cant_real != cant_esperada:
@@ -232,6 +232,10 @@ def procesar_torneo(partidos):
         goles(info_equipos,local,visita,goles_local,goles_visita)
 
         partidos_jugados(info_equipos,local,visita)
+    
+    for equipo, stats in info_equipos.items():
+        if stats["partidos jugados"] != 3:
+            raise ValueError(f"{equipo} tiene una cantidad inválida de partidos")
 
     for equipo in info_equipos:
         diferencia_de_goles(info_equipos,equipo)
