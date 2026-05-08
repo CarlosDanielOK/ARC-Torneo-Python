@@ -26,24 +26,13 @@ def leer_archivo(archivo):
             if cant_esperada != 6:
                 raise ValueError(f"Se esperaban 6 partidos, el archivo indica {cant_esperada}")
 
+            patron = r"^([A-Z]{3}) (?!\1)[A-Z]{3} (?:[0-9]|1[0-9]|20) (?:[0-9]|1[0-9]|20)$"
             for linea in resultados_grupos:
-                partes = linea.strip().split()
-                
-                if len(partes) != 4:
+                linea_strip=linea.strip()
+                if re.match(patron, linea_strip):
+                    partidos.append(linea_strip.split())
+                else:
                     raise ValueError("Error en datos del archivo, partidos mal ingresados")
-                local, visitante, goles_local, goles_visitante = partes
-                if local == visitante:
-                    raise ValueError("Equipo local y visitante no deben ser los mismos")
-                if not local.isupper() or len(local) != 3:
-                    raise ValueError("Error en datos del archivo, partidos mal ingresados")
-                
-                if not visitante.isupper() or len(visitante) != 3:
-                    raise ValueError("Error en datos del archivo, partidos mal ingresados")
-                
-                if not goles_local.isdigit() or not goles_visitante.isdigit():
-                    raise ValueError("Error en datos del archivo, partidos mal ingresados")
-                
-                partidos.append(partes)
 
             cant_real = len(partidos)
             if cant_real != cant_esperada:
@@ -103,6 +92,7 @@ def tabla_de_datos(partidos):
             info_equipos[local] = estadisticas_vacias.copy()
         if visita not in info_equipos:
             info_equipos[visita] = estadisticas_vacias.copy()
+    if len(info_equipos)!=4:raise ValueError("Cantidad de equipos erronea , verificar que sean 4 equipos")
     return info_equipos
 
 
@@ -168,7 +158,6 @@ def procesar_torneo(partidos):
         dict: Diccionario final ordenado (actualmente por puntos).
     """
     info_equipos = tabla_de_datos(partidos)
-
     for partido in partidos:
         local = partido[0]
         visita = partido[1]
