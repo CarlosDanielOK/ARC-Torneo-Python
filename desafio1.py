@@ -85,7 +85,8 @@ def tabla_de_datos(partidos):
             "puntos":0,
             "goles a favor":0,
             "goles en contra":0,
-            "diferencia de gol":0
+            "diferencia de gol":0,
+            "partidos jugados":0
         }
 
         if local not in info_equipos:
@@ -94,6 +95,19 @@ def tabla_de_datos(partidos):
             info_equipos[visita] = estadisticas_vacias.copy()
     if len(info_equipos)!=4:raise ValueError("Cantidad de equipos erronea , verificar que sean 4 equipos")
     return info_equipos
+
+
+def partidos_jugados(info_equipos, local, visita):
+    """
+    Modifica la tabla de datos sumando 1 por cada partido en el que participe el equipo.
+
+    Args:
+        info_equipos (dict): Diccionario principal con las estadísticas.
+        local (str): Nombre del equipo local.
+        visita (str): Nombre del equipo visitante.
+    """
+    info_equipos[local]["partidos jugados"] += 1
+    info_equipos[visita]["partidos jugados"] += 1
 
 
 def puntos(info_equipos, local, visita, resultado):
@@ -146,6 +160,54 @@ def diferencia_de_goles(info_equipos, equipo):
     info_equipos[equipo]["diferencia de gol"] = gf - gc
 
 
+def nombre_equipo(info_equipo):
+    """
+    Retorna el nombre del equipo.
+
+    Args:
+        info_equipo (tuple): Tupla con el nombre del equipo y sus estadísticas.
+
+    Returns:
+        string: Nombre de equipo
+    """
+    return info_equipo[0]
+
+
+def info_determinante(info_equipo):
+    """
+    Retorna los datos clave que determinan la clasificación oficial.
+    Este paso permite usar una tupla para aplicar los múltiples criterios de desempate en orden.
+
+    Args:
+        info_equipo (tuple): Tupla con el nombre del equipo y sus estadísticas.
+
+    Returns:
+        tuple: (puntos, diferencia de gol, goles a favor, nombre_equipo)
+    """
+    datos = info_equipo[1]
+
+    return (datos["puntos"],datos["diferencia de gol"],datos["goles a favor"])
+
+
+def clasificacion(info_equipos):
+    """
+    Ordena completamente los equipos basándose en los factores determinantes (Puntos, Diferencia de goles, Goles a favor).
+    En caso de empate numerico se matendra el primer ordenamiento por nombre alfabeticamente.
+
+    Args:
+        info_equipos (dict): Diccionario principal con las estadísticas.
+
+    Returns:
+        list: Lista de tuplas completamente ordenada de primero a último.
+    """
+    lista_equipos = list(info_equipos.items())
+
+    lista_equipos = sorted(lista_equipos,key = nombre_equipo)
+    lista_equipos = sorted(lista_equipos,key = info_determinante,reverse = True)
+
+    return lista_equipos
+
+
 def procesar_torneo(partidos):
     """
     Función principal que genera la tabla, itera sobre los partidos y asienta los puntos y goles.
@@ -169,49 +231,12 @@ def procesar_torneo(partidos):
 
         goles(info_equipos,local,visita,goles_local,goles_visita)
 
+        partidos_jugados(info_equipos,local,visita)
+
     for equipo in info_equipos:
         diferencia_de_goles(info_equipos,equipo)
         
     return clasificacion(info_equipos)
-
-
-def nombre_equipo(info_equipo):
-    return info_equipo[0]
-
-
-def info_determinante(info_equipo):
-    """
-    Retorna los datos clave que determinan la clasificación oficial.
-    Este paso permite usar una tupla para aplicar los múltiples criterios de desempate en orden.
-
-    Args:
-        info_equipo (tuple): Tupla con el nombre del equipo y sus estadísticas.
-
-    Returns:
-        tuple: (puntos, diferencia de gol, goles a favor, nombre_equipo)
-    """
-    datos = info_equipo[1]
-
-    return (datos["puntos"],datos["diferencia de gol"],datos["goles a favor"])
-
-
-def clasificacion(info_equipos):
-    """
-    Ordena completamente los equipos basándose en los factores determinantes (Puntos, DG, GF).
-    EN caso de empate numerico se matendra el primer ordenamiento por nombre alfabeticamente.
-
-    Args:
-        info_equipos (dict): Diccionario principal con las estadísticas.
-
-    Returns:
-        list: Lista de tuplas completamente ordenada de primero a último.
-    """
-    lista_equipos = list(info_equipos.items())
-
-    lista_equipos = sorted(lista_equipos,key = nombre_equipo)
-    lista_equipos = sorted(lista_equipos,key = info_determinante,reverse = True)
-
-    return lista_equipos
 
 
 def mostrar_resultados(equipos):
@@ -235,6 +260,7 @@ def mensaje_salida():
         print("Saliendo...")
         return True
     return False
+
 
 def main():
     while True:
