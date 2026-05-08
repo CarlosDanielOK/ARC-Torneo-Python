@@ -187,6 +187,15 @@ def procesar_torneo(partidos):
 
 
 def nombre_equipo(info_equipo):
+    """
+    Retorna el nombre del equipo
+
+    Args:
+        info_equipo (tuple): Tupla con el nombre del equipo y sus estadísticas.
+
+    Returns:
+        string: Nombre de equipo
+    """
     return info_equipo[0]
 
 
@@ -208,7 +217,7 @@ def info_determinante(info_equipo):
 
 def clasificacion(info_equipos):
     """
-    Ordena completamente los equipos basándose en los factores determinantes (Puntos, DG, GF).
+    Ordena completamente los equipos basándose en los factores determinantes (Puntos, Diferencia de goles, Goles a favor).
     EN caso de empate numerico se matendra el primer ordenamiento por nombre alfabeticamente.
 
     Args:
@@ -246,6 +255,7 @@ def mensaje_salida():
         print("Saliendo...")
         return True
     return False
+
 
 def main():
     while True:
