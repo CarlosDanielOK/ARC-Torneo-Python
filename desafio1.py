@@ -239,6 +239,12 @@ def mostrar_resultados(equipos):
 
 
 def mensaje_salida():
+    """
+    Solicita al usuario si desea salir del programa.
+
+    Returns:
+        bool: True si el usuario desea salir, False si desea continuar.
+    """
     respuesta = input("¿Desea salir? (s/n): ")
     if respuesta.lower() != "n":
         print("Saliendo...")
@@ -247,6 +253,11 @@ def mensaje_salida():
 
 
 def main():
+    """
+    Punto de entrada del programa. Contiene el loop principal que solicita
+    la ruta del archivo, procesa el torneo y muestra los resultados.
+    Permite reintentar ante errores y salir cuando el usuario lo indique.
+    """
     while True:
         try:
             ruta_archivo = input("Ingrese la direccion del archivo: ")
