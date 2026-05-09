@@ -287,4 +287,5 @@ def main():
         if mensaje_salida():
             break
 
-main()
+if __name__ == "__main__":
+    main()
