@@ -163,35 +163,6 @@ def diferencia_de_goles(info_equipos, equipo):
     info_equipos[equipo]["diferencia de gol"] = gf - gc
 
 
-def nombre_equipo(info_equipo):
-    """
-    Retorna el nombre del equipo.
-
-    Args:
-        info_equipo (tuple): Tupla con el nombre del equipo y sus estadísticas.
-
-    Returns:
-        string: Nombre de equipo
-    """
-    return info_equipo[0]
-
-
-def info_determinante(info_equipo):
-    """
-    Retorna los datos clave que determinan la clasificación oficial.
-    Este paso permite usar una tupla para aplicar los múltiples criterios de desempate en orden.
-
-    Args:
-        info_equipo (tuple): Tupla con el nombre del equipo y sus estadísticas.
-
-    Returns:
-        tuple: (puntos, diferencia de gol, goles a favor, nombre_equipo)
-    """
-    datos = info_equipo[1]
-
-    return (datos["puntos"],datos["diferencia de gol"],datos["goles a favor"])
-
-
 def clasificacion(info_equipos):
     """
     Ordena completamente los equipos basándose en los factores determinantes (Puntos, Diferencia de goles, Goles a favor).
@@ -203,8 +174,6 @@ def clasificacion(info_equipos):
     Returns:
         list: Lista de tuplas completamente ordenada de primero a último.
     """
-    lista_equipos = list(info_equipos.items())
-
     lista_equipos = sorted(
     info_equipos.items(),
     key=lambda x: (
