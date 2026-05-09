@@ -1,4 +1,7 @@
 import re
+
+_CANT_PARTIDOS_ESPERADA = 6
+
 def leer_archivo(archivo):
     """
     Lee y procesa el archivo de texto con los resultados de los partidos.
@@ -23,7 +26,7 @@ def leer_archivo(archivo):
             except ValueError:
                 raise ValueError("La primera línea debe ser la cantidad de partidos")
 
-            if cant_esperada != 6:
+            if cant_esperada != _CANT_PARTIDOS_ESPERADA:
                 raise ValueError(f"Se esperaban 6 partidos, el archivo indica {cant_esperada} partidos")
 
             patron = r"^([A-Z]{3}) (?!\1)[A-Z]{3} (?:[0-9]|1[0-9]|20) (?:[0-9]|1[0-9]|20)$"
@@ -202,8 +205,15 @@ def clasificacion(info_equipos):
     """
     lista_equipos = list(info_equipos.items())
 
-    lista_equipos = sorted(lista_equipos,key = nombre_equipo)
-    lista_equipos = sorted(lista_equipos,key = info_determinante,reverse = True)
+    lista_equipos = sorted(
+    info_equipos.items(),
+    key=lambda x: (
+        -x[1]["puntos"],
+        -x[1]["diferencia de gol"],
+        -x[1]["goles a favor"],
+        x[0]  # desempate alfabético
+    )
+)
 
     return lista_equipos
 
