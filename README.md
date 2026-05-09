@@ -10,8 +10,8 @@
 | Integrante |
 |---|
 | Agustina Fernandez Haisner |
-| Royer Yampasi Laura |
-| Carlos Lazo Corrales |
+| Royer Rolando Yampasi Laura |
+| Carlos Daniel Corrales Lazo |
 
 ---
 
