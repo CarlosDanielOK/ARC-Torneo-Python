@@ -84,7 +84,7 @@ def tabla_de_datos(partidos):
     for partido in partidos:
         local = partido[0]
         visita = partido[1]
-        estadisticas_vacias={
+        estadisticas_vacias = {
             "puntos":0,
             "goles a favor":0,
             "goles en contra":0,
@@ -96,7 +96,8 @@ def tabla_de_datos(partidos):
             info_equipos[local] = estadisticas_vacias.copy()
         if visita not in info_equipos:
             info_equipos[visita] = estadisticas_vacias.copy()
-    if len(info_equipos)!=4:raise ValueError("Cantidad de equipos erronea , verificar que sean 4 equipos")
+    if len(info_equipos)!=4:
+        raise ValueError("Cantidad de equipos erronea, verificar que sean 4 equipos")
     return info_equipos
 
 
@@ -124,12 +125,12 @@ def puntos(info_equipos, local, visita, resultado):
         resultado (str): Cadena indicando el ganador ("Local", "Visita", "Empate").
     """
     if resultado == "Local":
-        info_equipos[local]["puntos"]+=3
+        info_equipos[local]["puntos"] += 3
     if resultado == "Visita":
-        info_equipos[visita]["puntos"]+=3
+        info_equipos[visita]["puntos"] += 3
     if resultado == "Empate":
-        info_equipos[local]["puntos"]+=1
-        info_equipos[visita]["puntos"]+=1
+        info_equipos[local]["puntos"] += 1
+        info_equipos[visita]["puntos"] += 1
 
 
 def goles(info_equipos, local, visita, goles_local, goles_visita):
