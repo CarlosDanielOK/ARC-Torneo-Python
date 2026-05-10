@@ -11,7 +11,7 @@
 |---|
 | Agustina Fernandez Haisner |
 | Royer Rolando Yampasi Laura |
-| Carlos Daniel Corrales Lazo |
+| Carlos Daniel Lazo Corrales |
 
 ---
 
