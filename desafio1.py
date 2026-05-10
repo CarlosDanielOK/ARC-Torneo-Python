@@ -85,11 +85,11 @@ def tabla_de_datos(partidos):
         local = partido[0]
         visita = partido[1]
         estadisticas_vacias = {
-            "puntos":0,
-            "goles a favor":0,
-            "goles en contra":0,
-            "diferencia de gol":0,
-            "partidos jugados":0
+            "puntos": 0,
+            "goles a favor": 0,
+            "goles en contra": 0,
+            "diferencia de gol": 0,
+            "partidos jugados": 0
         }
 
         if local not in info_equipos:
@@ -207,11 +207,11 @@ def procesar_torneo(partidos):
         goles_visita = int(partido[3])
         res = resultado(goles_local, goles_visita)
 
-        puntos(info_equipos, local, visita,res)
+        puntos(info_equipos, local, visita, res)
 
         goles(info_equipos, local, visita, goles_local, goles_visita)
 
-        partidos_jugados(info_equipos, local,visita)
+        partidos_jugados(info_equipos, local, visita)
     
     for equipo, stats in info_equipos.items():
         if stats["partidos jugados"] != 3:
