@@ -176,14 +176,14 @@ def clasificacion(info_equipos):
         list: Lista de tuplas completamente ordenada de primero a último.
     """
     lista_equipos = sorted(
-    info_equipos.items(),
-    key=lambda x: (
-        -x[1]["puntos"],
-        -x[1]["diferencia de gol"],
-        -x[1]["goles a favor"],
-        x[0]  # desempate alfabético
+        info_equipos.items(),
+        key=lambda x: (
+            -x[1]["puntos"],
+            -x[1]["diferencia de gol"],
+            -x[1]["goles a favor"],
+            x[0],  # desempate alfabético
+        ),
     )
-)
 
     return lista_equipos
 
