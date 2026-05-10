@@ -135,27 +135,3 @@ El programa valida y reporta los siguientes errores sin interrumpirse:
 | Algún equipo con partidos jugados distinto de 3 | `[equipo] tiene una cantidad inválida de partidos` |
 
 Ante cualquier error se muestra un mensaje descriptivo y se ofrece intentar con otro archivo.
-
----
-
-## Casos de prueba
-
-| # | Descripción | Resultado esperado |
-|---|---|---|
-| 1 | Ejemplo de la consigna, tabla sin empates | `ESP / ARG / Tercero: BRA` |
-| 2 | Desempate por goles a favor (misma DG y pts) | `ESP / BRA / Tercero: ARG` |
-| 3 | Desempate alfabético puro (todo igual) | `ARG / BRA / Tercero: ESP` |
-| 4 | Todos con 4 puntos, desempate por diferencia de gol | `ARG / BRA / Tercero: ESP` |
-| 5 | Goles máximos permitidos (20) | `ARG / BRA / Tercero: JPN` |
-| 6 | Todos los partidos 0-0, empate absoluto | `ARG / BRA / Tercero: ESP` |
-| 7 | Un equipo gana todos sus partidos | `ARG / ESP / Tercero: BRA` |
-| 8 | Primera línea no es número | Error |
-| 9 | Primera línea indica 5 partidos | Error |
-| 10 | Nombre de equipo en minúsculas | Error |
-| 11 | Nombre de equipo con 4 letras | Error |
-| 12 | Equipo jugando contra sí mismo | Error |
-| 13 | Goles negativos | Error |
-| 14 | Goles fuera de rango (21) | Error |
-| 15 | Solo 3 equipos distintos | Error |
-| 16 | Archivo vacío | Error |
-| 17 | Solo la primera línea, sin partidos | Error |
