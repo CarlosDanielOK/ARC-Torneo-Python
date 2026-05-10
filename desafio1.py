@@ -31,7 +31,7 @@ def leer_archivo(archivo):
 
             patron = r"^([A-Z]{3}) (?!\1)[A-Z]{3} (?:[0-9]|1[0-9]|20) (?:[0-9]|1[0-9]|20)$"
             for linea in resultados_grupos:
-                linea_strip=linea.strip()
+                linea_strip = linea.strip()
                 if re.match(patron, linea_strip):
                     partidos.append(linea_strip.split())
                 else:
@@ -96,7 +96,7 @@ def tabla_de_datos(partidos):
             info_equipos[local] = estadisticas_vacias.copy()
         if visita not in info_equipos:
             info_equipos[visita] = estadisticas_vacias.copy()
-    if len(info_equipos)!=4:
+    if len(info_equipos) != 4:
         raise ValueError("Cantidad de equipos erronea, verificar que sean 4 equipos")
     return info_equipos
 
@@ -205,20 +205,20 @@ def procesar_torneo(partidos):
         visita = partido[1]
         goles_local = int(partido[2])
         goles_visita = int(partido[3])
-        res = resultado(goles_local,goles_visita)
+        res = resultado(goles_local, goles_visita)
 
-        puntos(info_equipos,local,visita,res)
+        puntos(info_equipos, local, visita,res)
 
-        goles(info_equipos,local,visita,goles_local,goles_visita)
+        goles(info_equipos, local, visita, goles_local, goles_visita)
 
-        partidos_jugados(info_equipos,local,visita)
+        partidos_jugados(info_equipos, local,visita)
     
     for equipo, stats in info_equipos.items():
         if stats["partidos jugados"] != 3:
             raise ValueError(f"{equipo} tiene una cantidad inválida de partidos")
 
     for equipo in info_equipos:
-        diferencia_de_goles(info_equipos,equipo)
+        diferencia_de_goles(info_equipos, equipo)
         
     return clasificacion(info_equipos)
 
