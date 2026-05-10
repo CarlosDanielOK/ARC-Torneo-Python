@@ -166,8 +166,7 @@ def diferencia_de_goles(info_equipos, equipo):
 
 def clasificacion(info_equipos):
     """
-    Ordena completamente los equipos basándose en los factores determinantes (Puntos, Diferencia de goles, Goles a favor).
-    En caso de empate numerico se matendra el primer ordenamiento por nombre alfabeticamente.
+    Ordena completamente los equipos basándose en los factores determinantes en el siguiente orden (Puntos, Diferencia de goles, Goles a favor, Orden alfabetico de los nombres).
 
     Args:
         info_equipos (dict): Diccionario principal con las estadísticas.
@@ -181,8 +180,8 @@ def clasificacion(info_equipos):
             -x[1]["puntos"],
             -x[1]["diferencia de gol"],
             -x[1]["goles a favor"],
-            x[0],  # desempate alfabético
-        ),
+            x[0]
+        )
     )
 
     return lista_equipos
