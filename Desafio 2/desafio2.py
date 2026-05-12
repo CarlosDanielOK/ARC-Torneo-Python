@@ -2,22 +2,20 @@ def leer_archivo(archivo):
 
         with open(archivo, "r") as resultados_grupos:
             historial=resultados_grupos.read().strip()
-
+            if not (1 <= len(historial) <= 1000):
+                raise ValueError("Cantidad de historial eccede las 1000 valores")
         return historial
-
-
-def separar_caracteres(string):
-    letras=[]
-    for letra in string:
-        letras.append(letra)
-
-    return letras
 
 
 def tabla_datos(letras):
     direcciones={}
+        
     for letra in letras:
-        direcciones[letra] = direcciones.get(letra, 0) + 1
+        letra_Upper=letra.upper()
+        if letra_Upper == "L" or  letra_Upper == "C" or letra_Upper == "R":
+            direcciones[letra_Upper] = direcciones.get(letra_Upper, 0) + 1
+        else: 
+            raise ValueError(f"Formato no valido, {letra_Upper} no es valido" )        
     return direcciones
 
 
@@ -37,7 +35,7 @@ def mostrar_resultado(resultado):
 
 
 def prediccion_penales(historial):
-    tabla = tabla_datos(separar_caracteres(historial))
+    tabla = tabla_datos(historial)
     mostrar_resultado(direccion_dominante(tabla))
 
 
