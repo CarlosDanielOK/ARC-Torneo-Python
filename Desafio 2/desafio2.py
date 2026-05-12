@@ -1,11 +1,12 @@
 def leer_archivo(archivo):
-
+    try:
         with open(archivo, "r") as resultados_grupos:
             historial=resultados_grupos.read().strip()
             if not (1 <= len(historial) <= 1000):
                 raise ValueError("Cantidad de historial eccede las 1000 valores")
         return historial
-
+    except FileNotFoundError:
+        raise FileNotFoundError(f"No se encontro el archivo {archivo}")
 
 def tabla_datos(letras):
     direcciones={}
@@ -17,7 +18,6 @@ def tabla_datos(letras):
         else: 
             raise ValueError(f"Formato no valido, {letra_Upper} no es valido" )        
     return direcciones
-
 
 def direccion_dominante(tabla):
     cant_mayor = 0
@@ -46,12 +46,14 @@ def mensaje_salida():
     Returns:
         bool: True si el usuario desea salir, False si desea continuar.
     """
+    respuesta_bool=True
     respuesta = input("¿Desea salir? (s/n): ")
     if respuesta.lower() != "n":
         print("Saliendo...")
-        return True
-    return False
-
+        respuesta_bool = False
+    else:
+        respuesta_bool = True
+    return respuesta_bool
 
 def main():
     """
@@ -59,7 +61,8 @@ def main():
     la ruta del archivo, procesa el torneo y muestra los resultados.
     Permite reintentar ante errores y salir cuando el usuario lo indique.
     """
-    while True:
+    continuar=True
+    while continuar:
         try:
             ruta_archivo = input("Ingrese la nombre del archivo .txt: ")+".txt"
             prediccion_penales(leer_archivo(ruta_archivo))
@@ -67,8 +70,8 @@ def main():
         except Exception as e:
             print(f"Error: {e}")
         
-        if mensaje_salida():
-            break
+        continuar = mensaje_salida()
+            
 
 if __name__ == "__main__":
     main()
