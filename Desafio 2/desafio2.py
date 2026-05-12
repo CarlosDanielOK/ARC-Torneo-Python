@@ -3,8 +3,43 @@ def leer_archivo(archivo):
         with open(archivo, "r") as resultados_grupos:
             historial=resultados_grupos.read().strip()
 
-        print(historial)
         return historial
+
+
+def separar_caracteres(string):
+    letras=[]
+    for letra in string:
+        letras.append(letra)
+
+    return letras
+
+
+def tabla_datos(letras):
+    direcciones={}
+    for letra in letras:
+        direcciones[letra] = direcciones.get(letra, 0) + 1
+    return direcciones
+
+
+def direccion_dominante(tabla):
+    cant_mayor = 0
+    for direccion in tabla:
+        if tabla[direccion] > cant_mayor:
+            dirc_dominante = direccion
+            cant_mayor = tabla[direccion]
+
+    return (dirc_dominante, cant_mayor)
+
+
+def mostrar_resultado(resultado):
+    for dato in resultado:
+        print(dato)
+
+
+def prediccion_penales(historial):
+    tabla = tabla_datos(separar_caracteres(historial))
+    mostrar_resultado(direccion_dominante(tabla))
+
 
 def mensaje_salida():
     """
@@ -29,7 +64,8 @@ def main():
     while True:
         try:
             ruta_archivo = input("Ingrese la nombre del archivo .txt: ")+".txt"
-            leer_archivo(ruta_archivo)
+            prediccion_penales(leer_archivo(ruta_archivo))
+            
         except Exception as e:
             print(f"Error: {e}")
         
