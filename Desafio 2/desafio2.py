@@ -50,16 +50,10 @@ def mensaje_salida():
     Solicita al usuario si desea salir del programa.
 
     Returns:
-        bool: True si el usuario desea salir, False si desea continuar.
+        bool: False si el usuario desea salir, True si desea continuar.
     """
-    respuesta_bool=True
     respuesta = input("¿Desea salir? (s/n): ")
-    if respuesta.lower() != "n":
-        print("Saliendo...")
-        respuesta_bool = False
-    else:
-        respuesta_bool = True
-    return respuesta_bool
+    return respuesta.lower() == "n"  # True = continuar, False = salir
 
 def main():
     """
