@@ -1,7 +1,7 @@
 def leer_archivo(archivo):
     try:
         with open(archivo, "r") as resultados_grupos:
-            historial=resultados_grupos.read().strip()
+            historial=resultados_grupos.read().strip().upper()
             if not (1 <= len(historial) <= 1000):
                 raise ValueError("Cantidad de historial eccede las 1000 valores")
         return historial
@@ -12,11 +12,10 @@ def tabla_datos(letras):
     direcciones={}
         
     for letra in letras:
-        letra_Upper=letra.upper()
-        if letra_Upper == "L" or  letra_Upper == "C" or letra_Upper == "R":
-            direcciones[letra_Upper] = direcciones.get(letra_Upper, 0) + 1
+        if letra == "L" or  letra == "C" or letra == "R":
+            direcciones[letra] = direcciones.get(letra, 0) + 1
         else: 
-            raise ValueError(f"Formato no valido, {letra_Upper} no es valido" )        
+            raise ValueError(f"Formato no valido, {letra} no es valido" )        
     return direcciones
 
 def direccion_dominante(tabla):
