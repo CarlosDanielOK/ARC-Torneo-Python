@@ -18,12 +18,18 @@ def tabla_datos(letras):
             raise ValueError(f"Formato no valido, {letra} no es valido" )        
     return direcciones
 
-def direccion_dominante(tabla):
+def ordenar_prioridad(datos):
+    orden=["C","R","L"]
+    lista_datos=sorted(datos,key=lambda direccion: orden.index(direccion[0]))
+    return lista_datos
+
+
+def direccion_dominante(datos):
     cant_mayor = 0
-    for direccion in tabla:
-        if tabla[direccion] > cant_mayor:
-            dirc_dominante = direccion
-            cant_mayor = tabla[direccion]
+    for dato in datos:
+        if dato[1] >= cant_mayor:
+            dirc_dominante = dato[0]
+            cant_mayor = dato[1]
 
     return (dirc_dominante, cant_mayor)
 
@@ -35,7 +41,8 @@ def mostrar_resultado(resultado):
 
 def prediccion_penales(historial):
     tabla = tabla_datos(historial)
-    mostrar_resultado(direccion_dominante(tabla))
+    datos_finales=tabla.items()
+    mostrar_resultado(direccion_dominante(ordenar_prioridad(datos_finales)))
 
 
 def mensaje_salida():
