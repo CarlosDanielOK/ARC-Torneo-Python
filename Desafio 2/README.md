@@ -35,8 +35,8 @@ Sistema que analiza el historial reciente de penales de un jugador rival y predi
 python desafio2.py
 ```
 
-2. Ingresar el nombre del archivo **sin la extensión** cuando se solicite:
-```
+2. Ingresar archivo cuando se solicite:
+
 Ingrese el nombre del archivo .txt y programa agrega `.txt` automáticamente.
 
 3. El programa muestra la dirección dominante y su frecuencia, luego pregunta si se desea continuar o salir.

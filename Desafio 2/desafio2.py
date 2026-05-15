@@ -62,6 +62,8 @@ def ordenar_prioridad(datos):
 
 def direccion_dominante(datos):
     """
+    Busca el numero mayor y en cazo de empate prioriza la direccion que este mas adelante en la lista.
+
     Args:
         datos (list): Lista ordenado.
 
@@ -79,7 +81,7 @@ def direccion_dominante(datos):
 
 def prediccion_penales(historial):
     """
-    Imprime en pantalla el registro con mayor cantidad y ordenado por prioridad.
+    Imprime en pantalla el registro con mayor cantidad y prioritario a los demas.
     
     Args:
         historial (str): Cadena de caracteres con el historial de penales.
