@@ -3,7 +3,7 @@ def leer_archivo(archivo):
         with open(archivo, "r") as resultados_grupos:
             historial=resultados_grupos.read().strip().upper()
             if not (1 <= len(historial) <= 1000):
-                raise ValueError("Cantidad de historial eccede las 1000 valores")
+                raise ValueError("La cantidad de registros debe estar en entre 1 a 1000")
         return historial
     except FileNotFoundError:
         raise FileNotFoundError(f"No se encontro el archivo {archivo}")
