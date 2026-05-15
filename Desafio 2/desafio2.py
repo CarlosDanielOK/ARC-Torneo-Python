@@ -37,6 +37,8 @@ def tabla_datos(letras):
     direcciones={}
         
     for letra in letras:
+        if letra == " ":
+            continue  # ignora espacios sin cortar el loop
         if letra in {"L", "R", "C"}:
             direcciones[letra] = direcciones.get(letra, 0) + 1
         else: 
