@@ -4,7 +4,7 @@ def leer_archivo(archivo):
         archivo (str): Ruta del archivo a leer.
 
     Returns:
-        list: Lista donde cada elemento es a su vez una lista con los datos de un partido.
+        str: Cadena de caracteres con el historial de penales en mayúsculas.
 
     Raises:
         FileNotFoundError: Si el archivo no existe.
@@ -17,6 +17,7 @@ def leer_archivo(archivo):
             if not (1 <= len(historial) <= 1000):
                 raise ValueError("La cantidad de registros debe estar en entre 1 a 1000")
         return historial
+    
     except FileNotFoundError:
         raise FileNotFoundError(f"No se encontro el archivo {archivo}")
 
@@ -26,7 +27,7 @@ def tabla_datos(letras):
         letras (str): Cadena de caracteres, cada caracer representa un registro.
 
     Returns:
-        dict: Diccionario final con los registros y sus cantidades correspodinetes.
+        dict: Diccionario final con los registros y sus cantidades correspodientes.
 
     Raises:
         ValueError: Si el formato no es valido (solo acepta en el registro L, C y R).
@@ -36,7 +37,7 @@ def tabla_datos(letras):
     direcciones={}
         
     for letra in letras:
-        if letra == "L" or  letra == "C" or letra == "R":
+        if letra in {"L", "R", "C"}:
             direcciones[letra] = direcciones.get(letra, 0) + 1
         else: 
             raise ValueError(f"Formato no valido, {letra} no es valido" )        
@@ -45,10 +46,10 @@ def tabla_datos(letras):
 def ordenar_prioridad(datos):
     """
     Args:
-        datos (dict): Diccionario final con los registros y sus cantidades correspodinetes.
+        datos (dict): Diccionario final con los registros y sus cantidades correspodientes.
 
     Returns:
-        list: Lista ordenanda por prioridad siendo de la mas importante a la menos (L -> R -> C).
+        list: Lista ordenada por prioridad siendo de la mas importante a la menos (L -> R -> C).
 
     """
     datos_finales = datos.items()
@@ -79,14 +80,15 @@ def prediccion_penales(historial):
     Imprime en pantalla el registro con mayor cantidad y ordenado por prioridad.
     
     Args:
-        dict: Diccionario final con los registros y sus cantidades correspodinetes.
+        historial (str): Cadena de caracteres con el historial de penales.
     """
+    
     
     tabla = tabla_datos(historial)
     
     resultado = direccion_dominante(ordenar_prioridad(tabla))
-    print(resultado [0])
-    print(resultado [1])
+    print(resultado[0])
+    print(resultado[1])
 
 
 def mensaje_salida():
@@ -96,10 +98,8 @@ def mensaje_salida():
     Returns:
         bool: False si el usuario desea salir, True si desea continuar.
     """
-    contuar=False
     respuesta = input("¿Desea salir? (s/n): ")
-    contuar = respuesta.lower() == "n"  # True = continuar, False = salir
-    return contuar
+    return respuesta.lower() == "n"  # True = continuar, False = salir
 
 def main():
     """
