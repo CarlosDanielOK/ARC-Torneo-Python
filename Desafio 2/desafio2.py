@@ -1,7 +1,7 @@
 def leer_archivo(archivo):
     try:
         with open(archivo, "r") as resultados_grupos:
-            historial=resultados_grupos.read().strip().upper()
+            historial = resultados_grupos.read().strip().upper()
             if not (1 <= len(historial) <= 1000):
                 raise ValueError("La cantidad de registros debe estar en entre 1 a 1000")
         return historial
@@ -19,8 +19,8 @@ def tabla_datos(letras):
     return direcciones
 
 def ordenar_prioridad(datos):
-    orden=["C","R","L"]
-    lista_datos=sorted(datos,key=lambda direccion: orden.index(direccion[0]))
+    orden = ["C","R","L"]
+    lista_datos = sorted(datos,key=lambda direccion: orden.index(direccion[0]))
     return lista_datos
 
 
@@ -34,15 +34,12 @@ def direccion_dominante(datos):
     return (dirc_dominante, cant_mayor)
 
 
-def mostrar_resultado(resultado):
-    for dato in resultado:
-        print(dato)
-
-
 def prediccion_penales(historial):
     tabla = tabla_datos(historial)
-    datos_finales=tabla.items()
-    mostrar_resultado(direccion_dominante(ordenar_prioridad(datos_finales)))
+    datos_finales = tabla.items()
+    resultado = direccion_dominante(ordenar_prioridad(datos_finales))
+    print(resultado [0])
+    print(resultado [1])
 
 
 def mensaje_salida():
@@ -61,10 +58,10 @@ def main():
     la ruta del archivo, procesa el torneo y muestra los resultados.
     Permite reintentar ante errores y salir cuando el usuario lo indique.
     """
-    continuar=True
+    continuar = True
     while continuar:
         try:
-            ruta_archivo = input("Ingrese la nombre del archivo .txt: ")+".txt"
+            ruta_archivo = input("Ingrese el nombre del archivo .txt: ")+".txt"
             prediccion_penales(leer_archivo(ruta_archivo))
             
         except Exception as e:
