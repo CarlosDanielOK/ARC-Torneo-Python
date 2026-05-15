@@ -1,4 +1,16 @@
 def leer_archivo(archivo):
+    """
+        Args:
+        archivo (str): Ruta del archivo a leer.
+
+    Returns:
+        list: Lista donde cada elemento es a su vez una lista con los datos de un partido.
+
+    Raises:
+        FileNotFoundError: Si el archivo no existe.
+        ValueError: Si el formato o la cantidad de registros es incorrecta
+    
+    """
     try:
         with open(archivo, "r") as resultados_grupos:
             historial = resultados_grupos.read().strip().upper()
@@ -9,6 +21,18 @@ def leer_archivo(archivo):
         raise FileNotFoundError(f"No se encontro el archivo {archivo}")
 
 def tabla_datos(letras):
+    """
+    Args:
+        letras (str): Cadena de caracteres, cada caracer representa un registro.
+
+    Returns:
+        dict: Diccionario final con los registros y sus cantidades correspodinetes.
+
+    Raises:
+        ValueError: Si el formato no es valido (solo acepta en el registro L, C y R).
+    
+    """
+    
     direcciones={}
         
     for letra in letras:
@@ -19,12 +43,28 @@ def tabla_datos(letras):
     return direcciones
 
 def ordenar_prioridad(datos):
+    """
+    Args:
+        datos (dict): Diccionario final con los registros y sus cantidades correspodinetes.
+
+    Returns:
+        list: Lista ordenanda por prioridad siendo de la mas importante a la menos (L -> R -> C).
+
+    """
+    datos_finales = datos.items()
     orden = ["C","R","L"]
-    lista_datos = sorted(datos,key=lambda direccion: orden.index(direccion[0]))
+    lista_datos = sorted(datos_finales,key=lambda direccion: orden.index(direccion[0]))
     return lista_datos
 
 
 def direccion_dominante(datos):
+    """
+    Args:
+        datos (list): Lista ordenado.
+
+    Returns:
+        tupla(str,int): Tupla con el valor de mayor cantidad (registro, cantidad)
+    """
     cant_mayor = 0
     for dato in datos:
         if dato[1] >= cant_mayor:
@@ -35,9 +75,16 @@ def direccion_dominante(datos):
 
 
 def prediccion_penales(historial):
+    """
+    Imprime en pantalla el registro con mayor cantidad y ordenado por prioridad.
+    
+    Args:
+        dict: Diccionario final con los registros y sus cantidades correspodinetes.
+    """
+    
     tabla = tabla_datos(historial)
-    datos_finales = tabla.items()
-    resultado = direccion_dominante(ordenar_prioridad(datos_finales))
+    
+    resultado = direccion_dominante(ordenar_prioridad(tabla))
     print(resultado [0])
     print(resultado [1])
 
@@ -49,13 +96,17 @@ def mensaje_salida():
     Returns:
         bool: False si el usuario desea salir, True si desea continuar.
     """
+    contuar=False
     respuesta = input("¿Desea salir? (s/n): ")
-    return respuesta.lower() == "n"  # True = continuar, False = salir
+    contuar = respuesta.lower() == "n"  # True = continuar, False = salir
+    return contuar
 
 def main():
     """
     Punto de entrada del programa. Contiene el loop principal que solicita
-    la ruta del archivo, procesa el torneo y muestra los resultados.
+    la ruta del archivo, procesa el estadisticas de penales de un jugador y 
+    mostrar la tendencia de disparo Centro , Izquierda y Derecha.
+    
     Permite reintentar ante errores y salir cuando el usuario lo indique.
     """
     continuar = True
