@@ -107,7 +107,7 @@ Es decir, izquierda tiene prioridad sobre derecha, y derecha sobre centro.
 | Situación | Mensaje |
 |---|---|
 | Archivo no encontrado | `No se encontro el archivo [nombre]` |
-| Historial fuera de rango (>1000) | `Cantidad de historial excede las 1000 valores` |
+| Historial fuera de rango (>1000) | `La cantidad de registros debe estar en entre 1 a 1000` |
 | Carácter inválido en la secuencia | `Formato no valido, [caracter] no es valido` |
 
 Ante cualquier error se muestra un mensaje descriptivo y se ofrece intentar con otro archivo.
