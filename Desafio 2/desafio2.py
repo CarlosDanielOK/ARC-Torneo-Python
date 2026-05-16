@@ -49,13 +49,14 @@ def tabla_datos(letras):
 
 def direccion_dominante(tabla):
     """
-    Busca el numero mayor y en cazo de empate prioriza la direccion que este mas adelante en la lista.
+    Ordena segun la mayor cantidad y en caso de empate prioriza L > R > C.
+    Devuelve la direccion dominante.
 
     Args:
-        datos (list): Lista ordenado.
+        tabla(dict[str, int]): Diccionario con las direcciones y su cantidad de apariciones.
 
     Returns:
-        tupla(str,int): Tupla con el valor de mayor cantidad (registro, cantidad)
+        tupla(str,int): Tupla con los valores de la direccion dominante (direccion, cantidad)
     """
     prioridad = {"L": 2,"R": 1,"C": 0}
 

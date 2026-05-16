@@ -94,8 +94,7 @@ Es decir, izquierda tiene prioridad sobre derecha, y derecha sobre centro.
 |---|---|
 | `leer_archivo(archivo)` | Lee el archivo y devuelve el historial como string en mayúsculas |
 | `tabla_datos(letras)` | Cuenta las apariciones de cada dirección en un diccionario |
-| `ordenar_prioridad(datos)` | Ordena las direcciones según la prioridad táctica (C, R, L) |
-| `direccion_dominante(datos)` | Identifica la dirección con mayor frecuencia |
+| `direccion_dominante(datos)` | Identifica la dirección con mayor frecuencia y prioridad (L > C > R)|
 | `prediccion_penales(historial)` | Coordina el procesamiento completo |
 | `mensaje_salida()` | Gestiona la opción de continuar o salir del programa |
 | `main()` | Punto de entrada, contiene el loop principal |
