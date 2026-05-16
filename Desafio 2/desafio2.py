@@ -1,6 +1,8 @@
 def leer_archivo(archivo):
     """
-        Args:
+    Lee y procesa el archivo .txt como el historial de penales de un jugador.
+
+    Args:
         archivo (str): Ruta del archivo a leer.
 
     Returns:
@@ -33,7 +35,6 @@ def tabla_datos(letras):
         ValueError: Si el formato no es valido (solo acepta en el registro L, C y R).
     
     """
-    
     direcciones={}
         
     for letra in letras:
@@ -45,22 +46,8 @@ def tabla_datos(letras):
             raise ValueError(f"Formato no valido, {letra} no es valido" )        
     return direcciones
 
-def ordenar_prioridad(datos):
-    """
-    Args:
-        datos (dict): Diccionario final con los registros y sus cantidades correspodientes.
 
-    Returns:
-        list: Lista ordenada por prioridad siendo de la mas importante a la menos (L -> R -> C).
-
-    """
-    datos_finales = datos.items()
-    orden = ["C","R","L"]
-    lista_datos = sorted(datos_finales,key=lambda direccion: orden.index(direccion[0]))
-    return lista_datos
-
-
-def direccion_dominante(datos):
+def direccion_dominante(tabla):
     """
     Busca el numero mayor y en cazo de empate prioriza la direccion que este mas adelante en la lista.
 
@@ -70,13 +57,9 @@ def direccion_dominante(datos):
     Returns:
         tupla(str,int): Tupla con el valor de mayor cantidad (registro, cantidad)
     """
-    cant_mayor = 0
-    for dato in datos:
-        if dato[1] >= cant_mayor:
-            dirc_dominante = dato[0]
-            cant_mayor = dato[1]
+    prioridad = {"L": 2,"R": 1,"C": 0}
 
-    return (dirc_dominante, cant_mayor)
+    return max(tabla.items(), key = lambda x: (x[1], prioridad[x[0]]))
 
 
 def prediccion_penales(historial):
@@ -86,11 +69,9 @@ def prediccion_penales(historial):
     Args:
         historial (str): Cadena de caracteres con el historial de penales.
     """
-    
-    
     tabla = tabla_datos(historial)
     
-    resultado = direccion_dominante(ordenar_prioridad(tabla))
+    resultado = direccion_dominante(tabla)
     print(resultado[0])
     print(resultado[1])
 
