@@ -14,8 +14,8 @@ def leer_archivo(archivo):
     
     """
     try:
-        with open(archivo, "r") as resultados_grupos:
-            historial = resultados_grupos.read().strip().upper()
+        with open(archivo, "r") as resultados_penales:
+            historial = resultados_penales.read().strip().upper()
             if not (1 <= len(historial) <= 1000):
                 raise ValueError("La cantidad de registros debe estar en entre 1 a 1000")
         return historial
@@ -98,7 +98,9 @@ def main():
     continuar = True
     while continuar:
         try:
-            ruta_archivo = input("Ingrese el nombre del archivo .txt: ")+".txt"
+            ruta_archivo = input("Ingrese el nombre del archivo .txt: ").strip()
+            if not ruta_archivo.endswith(".txt"):
+                ruta_archivo += ".txt"
             prediccion_penales(leer_archivo(ruta_archivo))
             
         except Exception as e:
