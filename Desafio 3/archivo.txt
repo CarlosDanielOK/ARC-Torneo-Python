@@ -7,11 +7,11 @@ DePaul          | A | 35 | 20 | mediocampista  | False
 MacAllister     | A | 50 | 22 | mediocampista  | False
 Fernandez       | A | 65 | 25 | mediocampista  | False
 DiMaria         | A | 20 | 27 | delantero      | False
-Alvarez         | A | 50 | 28 | delantero      | False
 Messi           | A | 40 | 29 | delantero      | True
-Alisson         | B | 50 | 57 | arquero        | False
+Alvarez         | A | 40 | 29 | delantero      | False
+Alisson         | B | 50 | 59 | arquero        | False
 Marquinhos      | B | 30 | 52 | defensor       | False
-Silva           | B | 50 | 50 | defensor       | False
+Silva           | B | 50 | 50 | defensor       | True
 Militao         | B | 70 | 48 | defensor       | False
 Danilo          | B | 15 | 45 | defensor       | False
 Casemiro        | B | 35 | 40 | mediocampista  | False
