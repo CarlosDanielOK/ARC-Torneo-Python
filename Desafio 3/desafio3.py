@@ -46,9 +46,10 @@ def registrar_jugadores(jugadores,cancha):
         cancha[jugador["fila"]][jugador["columna"]]=jugador["equipo"]
             
     return True
-
 def validar_jugador(jugador,jugadores):
+    
     valido=False
+    
     if jugador["rol"] is ROLES_VALIDOS:
         valido = True
     if jugador["equipo"] is EQUIPOS_VALIDOS:
@@ -62,6 +63,15 @@ def validar_jugador(jugador,jugadores):
             valido=False 
         if jugador_posicionado['tiene_pelota']=="True" and jugador["tiene_pelota"]=="True":
             valido=False   
+    return valido    
+
+def registrar_jugador(jugador,jugadores):
+    
+    valido=validar_jugador(jugador,jugadores)
+
+    if valido:
+        jugadores.append(jugador)
+
     return valido    
 
 def subir_jugadores(archivo):
@@ -82,9 +92,6 @@ def subir_jugadores(archivo):
                         "tiene_pelota":jugador[5].strip()
                         }
                 valido = validar_jugador(jugador,jugadores)
-
-                if valido:
-                    jugadores.append(jugador)
 
     except FileNotFoundError:
         raise FileNotFoundError("El archivo no existe")
@@ -195,6 +202,16 @@ def mover_jugadores(jugadores,cancha):
         print(e)
     
     return se_movio
+def opcion_registrar_jugadores(jugadores,cancha):
+    
+    jugadores_archivo=subir_jugadores("archivo.txt")
+    
+    for jugador in jugadores_archivo:
+        registrar_jugador(jugador,jugadores)
+
+
+
+    jugadores_registrados = registrar_jugadores(jugadores,cancha)
 
 def mostrar_menu():
     print("\033[96m")  # cian
@@ -210,14 +227,8 @@ def mostrar_menu():
     print("╚══════════════════════════════╝")
     print("\033[0m")
 
-def menu(cancha):
+def controlador_opciones(cancha,jugadores):
     continuar=True
-    jugadores_registrados=False
-    jugadores=[]
-
-    limpiar_pantalla()  
-    mostrar_partido(cancha)
-
     while continuar:
         # if not jugadores_registrados:
         
@@ -227,8 +238,8 @@ def menu(cancha):
 
         match opcion:
             case 1:
-                jugadores=subir_jugadores("archivo.txt")
-                jugadores_registrados = registrar_jugadores(jugadores,cancha)
+                opcion_registrar_jugadores(jugadores,cancha)
+                
             case 2:
                 se_movio=False
                 while not se_movio:
@@ -244,6 +255,17 @@ def menu(cancha):
                 continuar=False
         limpiar_pantalla()
         mostrar_partido(cancha)
+
+
+def menu(cancha):
+    continuar=True
+    jugadores_registrados=False
+    jugadores=[]
+
+    limpiar_pantalla()  
+    mostrar_partido(cancha)
+
+    controlador_opciones(cancha, jugadores)
     
     
     
