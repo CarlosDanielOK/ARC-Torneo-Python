@@ -50,13 +50,13 @@ def validar_jugador(jugador,jugadores):
     
     valido=False
     
-    if jugador["rol"] is ROLES_VALIDOS:
+    if jugador["rol"] in ROLES_VALIDOS:
         valido = True
-    if jugador["equipo"] is EQUIPOS_VALIDOS:
+    if jugador["equipo"] in EQUIPOS_VALIDOS:
         valido = True
-    if 0 < jugador["fila"] < 100:
+    if 0 <= jugador["fila"] < FILAS:
         valido = True
-    if 0 < jugador["columna"] < 60:
+    if 0 <= jugador["columna"] < COLUMNAS:
         valido = True
     for jugador_posicionado in jugadores:
         if jugador_posicionado['fila'] == jugador["fila"] and jugador_posicionado['columna'] == jugador["columna"]:
@@ -68,7 +68,6 @@ def validar_jugador(jugador,jugadores):
 def registrar_jugador(jugador,jugadores):
     
     valido=validar_jugador(jugador,jugadores)
-
     if valido:
         jugadores.append(jugador)
 
@@ -92,7 +91,9 @@ def subir_jugadores(archivo):
                         "tiene_pelota":jugador[5].strip()
                         }
                 valido = validar_jugador(jugador,jugadores)
-
+            
+                if valido:
+                    jugadores.append(jugador)
     except FileNotFoundError:
         raise FileNotFoundError("El archivo no existe")
 
@@ -113,29 +114,27 @@ def mostrar_menu_movimientos(jugador):
     print("╚══════════════════════════════════════════════╝")
     print("\033[0m")
 
-def movimientos(jugador):
+def elegir_movimientos(jugador):
 
     movimientos_posibles=["arriba","abajo","izquierda","derecha"]
     
     mostrar_menu_movimientos(jugador)
 
-    posicion=int(pedir_input("Seleccion una opción:"))
+    direccion=int(pedir_input("Seleccion una opción:"))
     
-    return movimientos_posibles[posicion-1]
+    return movimientos_posibles[direccion-1]
 
-def mover(index,jugadores,cancha):
-
-    jugador=jugadores[index]
+def mover(jugador,cancha):
 
     fila=jugador["fila"]
     columna=jugador["columna"]
 
-    movimiento=movimientos(jugador)
-    se_movio=False
+    movimiento=elegir_movimientos(jugador)
 
+    se_movio=False
     match movimiento:
         case "arriba":
-            if fila-1 >= 0 and not cancha[fila-1][columna] in EQUIPOS_VALIDOS :
+            if fila-1 >= 0 and cancha[fila+1][columna]=='.' :
                 print("arriba")
                 cancha[fila-1][columna]=jugador["equipo"]
                 jugador["fila"]=fila-1
@@ -143,26 +142,27 @@ def mover(index,jugadores,cancha):
             else: 
                 raise IndexError("No se puede mover a esa posicion")
         case "abajo":
-            if fila< 100 and not cancha[fila+1][columna] in EQUIPOS_VALIDOS and cancha[fila+1][columna]=='.':
+            if fila< FILAS and cancha[fila+1][columna]=='.':
                 cancha[fila+1][columna]=jugador["equipo"]
                 jugador["fila"]=fila+1
                 se_movio=True
             else:
                 raise IndexError("No se puede mover a esa pocision")
         case "izquierda":
-            if columna-1 >= 0 and not cancha[fila][columna-1] in EQUIPOS_VALIDOS and cancha[fila][columna-1]=='.':
+            if columna-1 >= 0 and cancha[fila][columna-1]=='.':
                 cancha[fila][columna-1]=jugador["equipo"]
                 jugador["columna"]=columna-1
                 se_movio=True
             else: 
                 raise IndexError("No se puede mover a esa pocision")
         case "derecha":
-            if columna+1< 60 and not cancha[fila][columna+1] in EQUIPOS_VALIDOS and cancha[fila][columna+1]=='.':
+            if columna+1< 60 and cancha[fila][columna+1]=='.':
                 cancha[fila][columna+1]=jugador["equipo"]
                 jugador["columna"]=columna+1
                 se_movio=True
             else:
-                raise IndexError("No se puede mover a esa pocision")
+                mensaje_error("Movimiento inválido")
+            return False
 
         case _:
             se_movio=False
@@ -171,22 +171,33 @@ def mover(index,jugadores,cancha):
         cancha[fila][columna]="."
 
     return se_movio
+    
 def mostrar_lista_jugadores(jugadores):
     print("\033[96m")
-    print("╔════════════════════════════════════════════════╗")
-    print("║             SELECCIONAR JUGADOR                ║")
-    print("╠══════╦══════════════╦═════════╦════════════════╣")
-    print("║  N°  ║    Nombre    ║  Equipo ║      Rol       ║")
-    print("╠══════╬══════════════╬═════════╬════════════════╣")
+    
+    print("╔══════╦══════════════╦═════════╦════════════════╦═══════╦══════════╗")
+    print("║  N°  ║    Nombre    ║ Equipo  ║      Rol       ║ Fila  ║ Columna  ║")
+    print("╠══════╬══════════════╬═════════╬════════════════╬═══════╬══════════╣")
+
     for index, jugador in enumerate(jugadores):
+
         pelota = "⚽" if jugador["tiene_pelota"] == "True" else "  "
-        print(f"║  {index+1:<3} ║ {jugador['nombre']:<12} ║   {jugador['equipo']}  {pelota} ║ {jugador['rol']:<14} ║")
-    print("╠══════╩══════════════╩═════════╩════════════════╣")
-    print("║  0 - Cancelar                                  ║")
-    print("╚════════════════════════════════════════════════╝")
+
+        print(
+            f"║ {index+1:<4} ║ "
+            f"{jugador['nombre']:<12} ║ "
+            f"  {jugador['equipo']} {pelota}  ║ "
+            f"{jugador['rol']:<14} ║ "
+            f"{jugador['fila']:<5} ║ "
+            f"{jugador['columna']:<8} ║"
+        )
+
+    print("╠══════╩══════════════╩═════════╩════════════════╩═══════╩══════════╣")
+    print("║  0 - Cancelar                                                     ║")
+    print("╚═══════════════════════════════════════════════════════════════════╝")
     print("\033[0m")
 
-def mover_jugadores(jugadores,cancha):
+def menu_mover_jugadores(jugadores,cancha):
 
     se_movio = False
     
@@ -194,14 +205,22 @@ def mover_jugadores(jugadores,cancha):
 
     jugador_index=int(pedir_input("Seleccione un jugador para mover: "))-1
     
-    if jugador_index == -1:
-        return True  # salir sin mover
-    try:
-        se_movio = mover(jugador_index,jugadores,cancha)
-    except Exception as e:
-        print(e)
-    
+    if jugador_index < 0:
+            se_movio=True
+    else:
+        try:
+            jugador_seleccionado=jugadores[jugador_index]
+            se_movio = mover(jugador_seleccionado,cancha)
+        except Exception as e:
+                print(e)
+        
     return se_movio
+
+def mover_jugadores(jugadores,cancha):
+    se_movio=False
+    while not se_movio:
+        se_movio = menu_mover_jugadores(jugadores,cancha)  
+    
 def opcion_registrar_jugadores(jugadores,cancha):
     
     jugadores_archivo=subir_jugadores("archivo.txt")
@@ -239,12 +258,8 @@ def controlador_opciones(cancha,jugadores):
         match opcion:
             case 1:
                 opcion_registrar_jugadores(jugadores,cancha)
-                
             case 2:
-                se_movio=False
-                while not se_movio:
-                    se_movio =mover_jugadores(jugadores,cancha)
-                
+                mover_jugadores(jugadores,cancha)         
             case 3:
                 print("1")
             case 4:
@@ -258,8 +273,7 @@ def controlador_opciones(cancha,jugadores):
 
 
 def menu(cancha):
-    continuar=True
-    jugadores_registrados=False
+    
     jugadores=[]
 
     limpiar_pantalla()  
@@ -271,8 +285,15 @@ def menu(cancha):
     
 
 def mostrar_partido(cancha):
-        for fila in cancha:
-            print("".join(mostrar_celda(celda) for celda in fila))
+        print(" ", end="")
+
+        for columna in range(COLUMNAS+1):
+            print(f"{columna:<3}", end="")
+
+        print()
+        for index,fila in enumerate(cancha):
+            print(f"{index+1:<4}",end="")
+            print(f"{"":<2}".join(mostrar_celda(celda) for celda in fila))
 
 def main():
 

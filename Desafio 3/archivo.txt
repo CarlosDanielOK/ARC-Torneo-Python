@@ -19,4 +19,4 @@ Paqueta         | B | 50 | 38 | mediocampista  | False
 Gomes           | B | 65 | 35 | mediocampista  | False
 Raphinha        | B | 20 | 33 | delantero      | False
 Rodrygo         | B | 50 | 32 | delantero      | False
-Neymar          | B | 40 | 30 | delantero      | False
+Neymar          | B | 98 | 30 | delantero      | False
