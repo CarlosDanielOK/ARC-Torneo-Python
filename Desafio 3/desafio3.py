@@ -1,7 +1,185 @@
-FILAS = 100
+FILAS = 40
 COLUMNAS = 60
 ROLES_VALIDOS  = ["arquero", "defensor", "mediocampista", "delantero"]
 EQUIPOS_VALIDOS = ["A", "B"]
+JUGADORES = [
+    {
+        "nombre": "Romero",
+        "equipo": "A",
+        "fila": 20,
+        "columna": 2,
+        "rol": "arquero",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Otamendi",
+        "equipo": "A",
+        "fila": 12,
+        "columna": 8,
+        "rol": "defensor",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Lisandro",
+        "equipo": "A",
+        "fila": 20,
+        "columna": 10,
+        "rol": "defensor",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Tagliafico",
+        "equipo": "A",
+        "fila": 28,
+        "columna": 12,
+        "rol": "defensor",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Molina",
+        "equipo": "A",
+        "fila": 6,
+        "columna": 15,
+        "rol": "defensor",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "DePaul",
+        "equipo": "A",
+        "fila": 14,
+        "columna": 20,
+        "rol": "mediocampista",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "MacAllister",
+        "equipo": "A",
+        "fila": 20,
+        "columna": 22,
+        "rol": "mediocampista",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Fernandez",
+        "equipo": "A",
+        "fila": 26,
+        "columna": 25,
+        "rol": "mediocampista",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "DiMaria",
+        "equipo": "A",
+        "fila": 8,
+        "columna": 27,
+        "rol": "delantero",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Messi",
+        "equipo": "A",
+        "fila": 16,
+        "columna": 29,
+        "rol": "delantero",
+        "tiene_pelota": True
+    },
+    {
+        "nombre": "Alvarez",
+        "equipo": "A",
+        "fila": 18,
+        "columna": 31,
+        "rol": "delantero",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Alisson",
+        "equipo": "B",
+        "fila": 20,
+        "columna": 57,
+        "rol": "arquero",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Marquinhos",
+        "equipo": "B",
+        "fila": 12,
+        "columna": 52,
+        "rol": "defensor",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Silva",
+        "equipo": "B",
+        "fila": 20,
+        "columna": 50,
+        "rol": "defensor",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Militao",
+        "equipo": "B",
+        "fila": 28,
+        "columna": 48,
+        "rol": "defensor",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Danilo",
+        "equipo": "B",
+        "fila": 6,
+        "columna": 45,
+        "rol": "defensor",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Casemiro",
+        "equipo": "B",
+        "fila": 14,
+        "columna": 40,
+        "rol": "mediocampista",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Paqueta",
+        "equipo": "B",
+        "fila": 20,
+        "columna": 38,
+        "rol": "mediocampista",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Gomes",
+        "equipo": "B",
+        "fila": 26,
+        "columna": 35,
+        "rol": "mediocampista",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Raphinha",
+        "equipo": "B",
+        "fila": 8,
+        "columna": 33,
+        "rol": "delantero",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Rodrygo",
+        "equipo": "B",
+        "fila": 18,
+        "columna": 32,
+        "rol": "delantero",
+        "tiene_pelota": False
+    },
+    {
+        "nombre": "Neymar",
+        "equipo": "B",
+        "fila": 38,
+        "columna": 30,
+        "rol": "delantero",
+        "tiene_pelota": False
+    }
+]
 
 import os
 
@@ -41,63 +219,35 @@ def generar_cancha():
         cancha.append(fila_nueva)
     return cancha
 
-def registrar_jugadores(jugadores,cancha):
-    for jugador in jugadores:
+def posicionar_jugador(jugador,cancha):
         cancha[jugador["fila"]][jugador["columna"]]=jugador["equipo"]
             
-    return True
-def validar_jugador(jugador,jugadores):
+# def validar_jugador(jugador,jugadores):
     
-    valido=False
+#     valido=False
     
-    if jugador["rol"] in ROLES_VALIDOS:
-        valido = True
-    if jugador["equipo"] in EQUIPOS_VALIDOS:
-        valido = True
-    if 0 <= jugador["fila"] < FILAS:
-        valido = True
-    if 0 <= jugador["columna"] < COLUMNAS:
-        valido = True
-    for jugador_posicionado in jugadores:
-        if jugador_posicionado['fila'] == jugador["fila"] and jugador_posicionado['columna'] == jugador["columna"]:
-            valido=False 
-        if jugador_posicionado['tiene_pelota']=="True" and jugador["tiene_pelota"]=="True":
-            valido=False   
-    return valido    
+#     if jugador["rol"] in ROLES_VALIDOS:
+#         valido = True
+#     if jugador["equipo"] in EQUIPOS_VALIDOS:
+#         valido = True
+#     if 0 <= jugador["fila"] < FILAS:
+#         valido = True
+#     if 0 <= jugador["columna"] < COLUMNAS:
+#         valido = True
+#     for jugador_posicionado in jugadores:
+#         if jugador_posicionado['fila'] == jugador["fila"] and jugador_posicionado['columna'] == jugador["columna"]:
+#             valido=False 
+#         if jugador_posicionado['tiene_pelota'] and jugador["tiene_pelota"]:
+#             valido=False   
+#     return valido    
 
-def registrar_jugador(jugador,jugadores):
+# def registrar_jugador(jugador,jugadores):
     
-    valido=validar_jugador(jugador,jugadores)
-    if valido:
-        jugadores.append(jugador)
+#     valido=validar_jugador(jugador,jugadores)
+#     if valido:
+#         jugadores.append(jugador)
 
-    return valido    
-
-def subir_jugadores(archivo):
-
-    jugadores = []
-
-    try:
-        with open(archivo, "r") as jugadores_lista:
-            for linea in jugadores_lista:
-                jugador=linea.split("|")
-
-                jugador = {
-                        "nombre":jugador[0].strip(),
-                        "equipo":jugador[1].strip(),
-                        "fila":int(jugador[2].strip()),
-                        "columna":int(jugador[3].strip()),
-                        "rol":jugador[4].strip(),
-                        "tiene_pelota":jugador[5].strip()
-                        }
-                valido = validar_jugador(jugador,jugadores)
-            
-                if valido:
-                    jugadores.append(jugador)
-    except FileNotFoundError:
-        raise FileNotFoundError("El archivo no existe")
-
-    return jugadores
+#     return valido    
 
 def mostrar_menu_movimientos(jugador):
     print("\033[96m")
@@ -134,7 +284,7 @@ def mover(jugador,cancha):
     se_movio=False
     match movimiento:
         case "arriba":
-            if fila-1 >= 0 and cancha[fila+1][columna]=='.' :
+            if fila-1 >= 0 and cancha[fila-1][columna]=='.' :
                 print("arriba")
                 cancha[fila-1][columna]=jugador["equipo"]
                 jugador["fila"]=fila-1
@@ -172,7 +322,7 @@ def mover(jugador,cancha):
 
     return se_movio
     
-def mostrar_lista_jugadores(jugadores):
+def lista_jugadores(jugadores):
     print("\033[96m")
     
     print("╔══════╦══════════════╦═════════╦════════════════╦═══════╦══════════╗")
@@ -181,7 +331,7 @@ def mostrar_lista_jugadores(jugadores):
 
     for index, jugador in enumerate(jugadores):
 
-        pelota = "⚽" if jugador["tiene_pelota"] == "True" else "  "
+        pelota = "⚽" if jugador["tiene_pelota"] else "  "
 
         print(
             f"║ {index+1:<4} ║ "
@@ -201,7 +351,7 @@ def menu_mover_jugadores(jugadores,cancha):
 
     se_movio = False
     
-    mostrar_lista_jugadores(jugadores)
+    lista_jugadores(jugadores)
 
     jugador_index=int(pedir_input("Seleccione un jugador para mover: "))-1
     
@@ -222,15 +372,12 @@ def mover_jugadores(jugadores,cancha):
         se_movio = menu_mover_jugadores(jugadores,cancha)  
     
 def opcion_registrar_jugadores(jugadores,cancha):
-    
-    jugadores_archivo=subir_jugadores("archivo.txt")
-    
-    for jugador in jugadores_archivo:
-        registrar_jugador(jugador,jugadores)
 
+    for jugador in jugadores:
+        posicionar_jugador(jugador, cancha)
 
-
-    jugadores_registrados = registrar_jugadores(jugadores,cancha)
+    mensaje_ok("Jugadores posicionados correctamente")
+            
 
 def mostrar_menu():
     print("\033[96m")  # cian
@@ -254,6 +401,7 @@ def controlador_opciones(cancha,jugadores):
         mostrar_menu()
 
         opcion=int(pedir_input("Seleccione una opcion: "))
+        limpiar_pantalla()
 
         match opcion:
             case 1:
@@ -268,18 +416,16 @@ def controlador_opciones(cancha,jugadores):
                 print("1")
             case _:
                 continuar=False
-        limpiar_pantalla()
         mostrar_partido(cancha)
 
 
 def menu(cancha):
     
-    jugadores=[]
 
     limpiar_pantalla()  
     mostrar_partido(cancha)
 
-    controlador_opciones(cancha, jugadores)
+    controlador_opciones(cancha, JUGADORES)
     
     
     
