@@ -49,7 +49,7 @@ JUGADORES = [
         "fila": 14,
         "columna": 20,
         "rol": "mediocampista",
-        "tiene_pelota": False
+        "tiene_pelota": True
     },
     {
         "nombre": "MacAllister",
@@ -81,7 +81,7 @@ JUGADORES = [
         "fila": 16,
         "columna": 29,
         "rol": "delantero",
-        "tiene_pelota": True
+        "tiene_pelota": False
     },
     {
         "nombre": "Alvarez",
@@ -267,12 +267,14 @@ def mostrar_menu_movimientos(jugador):
 def elegir_movimientos(jugador):
 
     movimientos_posibles=["arriba","abajo","izquierda","derecha"]
-    
+    movimiento="cancelar"
     mostrar_menu_movimientos(jugador)
 
     direccion=int(pedir_input("Seleccion una opción:"))
-    
-    return movimientos_posibles[direccion-1]
+    if direccion > 0:
+        movimiento=movimientos_posibles[direccion-1]
+
+    return movimiento
 
 def mover(jugador,cancha):
 
@@ -292,7 +294,7 @@ def mover(jugador,cancha):
             else: 
                 raise IndexError("No se puede mover a esa posicion")
         case "abajo":
-            if fila< FILAS and cancha[fila+1][columna]=='.':
+            if fila+1< FILAS and cancha[fila+1][columna]=='.':
                 cancha[fila+1][columna]=jugador["equipo"]
                 jugador["fila"]=fila+1
                 se_movio=True
@@ -306,17 +308,14 @@ def mover(jugador,cancha):
             else: 
                 raise IndexError("No se puede mover a esa pocision")
         case "derecha":
-            if columna+1< 60 and cancha[fila][columna+1]=='.':
+            if columna+1< COLUMNAS and cancha[fila][columna+1]=='.':
                 cancha[fila][columna+1]=jugador["equipo"]
                 jugador["columna"]=columna+1
                 se_movio=True
             else:
-                mensaje_error("Movimiento inválido")
-            return False
-
+                raise IndexError("No se puede mover a esa pocision")
         case _:
-            se_movio=False
-            print("Opcion no valida")
+            raise print()
     if se_movio:
         cancha[fila][columna]="."
 
@@ -362,7 +361,7 @@ def menu_mover_jugadores(jugadores,cancha):
             jugador_seleccionado=jugadores[jugador_index]
             se_movio = mover(jugador_seleccionado,cancha)
         except Exception as e:
-                print(e)
+                mensaje_error("Opxion invalida")
         
     return se_movio
 
@@ -378,6 +377,39 @@ def opcion_registrar_jugadores(jugadores,cancha):
 
     mensaje_ok("Jugadores posicionados correctamente")
             
+def jugador_tiene_pelota(jugadores):
+    tiene_pelota=-1
+    for index,jugador in enumerate(jugadores):
+        if jugador["tiene_pelota"]:
+            tiene_pelota=index
+    return tiene_pelota
+
+def jugador_mas_cercano(index,jugadores):
+    jugador_tiene_pelota = jugadores[index]
+    distancia_menor = 100
+    jugador_cercano = None
+    for numero_jugador,jugador in enumerate(jugadores):
+        distancia = abs(jugador_tiene_pelota["fila"] - jugador["fila"]) + abs(jugador_tiene_pelota["columna"] - jugador["columna"])
+        if distancia < distancia_menor and distancia != 0:
+            jugador_cercano = numero_jugador
+    return jugadores[jugador_cercano]
+
+def mostrar_jugador_cercano(jugador_pelota,jugador_cercano):
+    print("\033[96m")
+    print("╔══════════════════════════════════════════════╗")
+    print(f"║ Jugador con pelota : {jugador_pelota['nombre']:<24}║")
+    print(f"║ Posición: Fila {jugador_pelota['fila']:<3} Columna {jugador_pelota['columna']:<17} ║")
+    print("╠══════════════════════════════════════════════╣")
+    print(f"║ Jugador mas cercano : {jugador_cercano['nombre']:<23}║")
+    print(f"║ Posición: Fila {jugador_cercano['fila']:<3} Columna {jugador_cercano['columna']:<17} ║")
+    print("╚══════════════════════════════════════════════╝")
+    print("\033[0m")
+
+def distancia_pelota(jugadores):
+        num_jugador=jugador_tiene_pelota(jugadores)
+        jugador_cercano=jugador_mas_cercano(num_jugador,jugadores)
+        mostrar_jugador_cercano(jugadores[num_jugador],jugador_cercano)
+
 
 def mostrar_menu():
     print("\033[96m")  # cian
@@ -393,7 +425,10 @@ def mostrar_menu():
     print("╚══════════════════════════════╝")
     print("\033[0m")
 
+
+
 def controlador_opciones(cancha,jugadores):
+
     continuar=True
     while continuar:
         # if not jugadores_registrados:
@@ -401,7 +436,7 @@ def controlador_opciones(cancha,jugadores):
         mostrar_menu()
 
         opcion=int(pedir_input("Seleccione una opcion: "))
-        limpiar_pantalla()
+        # limpiar_pantalla()
 
         match opcion:
             case 1:
@@ -409,7 +444,7 @@ def controlador_opciones(cancha,jugadores):
             case 2:
                 mover_jugadores(jugadores,cancha)         
             case 3:
-                print("1")
+                distancia_pelota(jugadores)
             case 4:
                 print("1")
             case 5:
@@ -431,14 +466,14 @@ def menu(cancha):
     
 
 def mostrar_partido(cancha):
-        print(" ", end="")
+        print("    ", end="")
 
-        for columna in range(COLUMNAS+1):
+        for columna in range(COLUMNAS):
             print(f"{columna:<3}", end="")
 
         print()
         for index,fila in enumerate(cancha):
-            print(f"{index+1:<4}",end="")
+            print(f"{index:<4}",end="")
             print(f"{"":<2}".join(mostrar_celda(celda) for celda in fila))
 
 def main():
