@@ -418,6 +418,79 @@ def detectar_pases(jugadores):
     else:
         mensaje_error("Ningun jugador tiene la pelota")
 
+def camino_libre_al_arco(jugador, cancha):
+    """
+    Verifica si un delantero tiene camino libre al arco rival en su misma fila.
+
+    Args:
+        jugador (dict): Jugador a verificar {nombre, fila, columna, equipo, rol, tiene_pelota}
+        cancha (list): Matriz de 40x60 con el estado actual del partido
+
+    Returns:
+        bool: True si tiene camino libre, False si no
+    """
+    if jugador["rol"] != "delantero":
+        return False
+
+    equipo  = jugador["equipo"]
+    fila    = jugador["fila"]
+    columna = jugador["columna"]
+
+    if equipo == "A":
+        if columna < 30:
+            return False
+        rival = "B"
+        celdas = range(columna + 1, COLUMNAS)
+    else:
+        if columna > 29:
+            return False
+        rival = "A"
+        celdas = range(columna - 1, -1, -1)
+
+    for col in celdas:
+        celda = cancha[fila][col]
+        if celda == rival or celda == "X":
+            return False
+
+    return True
+
+
+def detectar_camino_libre(jugadores, cancha):
+    """
+    Recorre todos los jugadores y detecta cuáles tienen camino libre al arco rival.
+
+    Args:
+        jugadores (list): Lista de jugadores [{nombre, fila, columna, equipo, rol, tiene_pelota}]
+        cancha (list): Matriz de 40x60 con el estado actual del partido
+    """
+    print("\033[96m")
+    print("╔══════════════════════════════════════════════╗")
+    print("║         CAMINO LIBRE AL ARCO                 ║")
+    print("║              Delanteros                      ║")
+    print("╠══════════════════════════════════════════════╣")
+
+    hay_delanteros = False
+
+    for jugador in jugadores:
+        if jugador["rol"] != "delantero":
+            continue
+
+        hay_delanteros = True
+        nombre  = jugador["nombre"]
+        equipo  = jugador["equipo"]
+        columna = jugador["columna"]
+
+        if camino_libre_al_arco(jugador, cancha):
+            print(f"║ ✅ {nombre:<20} ({equipo}) col {columna:<3} LIBRE    ║")
+        else:
+            print(f"║ ❌ {nombre:<20} ({equipo}) col {columna:<3} BLOQUEADO║")
+
+    if not hay_delanteros:
+        print("║  No hay delanteros registrados               ║")
+
+    print("╚══════════════════════════════════════════════╝")
+    print("\033[0m")
+
 def controlador_opciones(cancha,jugadores):
 
     continuar=True
@@ -437,7 +510,7 @@ def controlador_opciones(cancha,jugadores):
             case 4:
                 detectar_pases(jugadores)
             case 5:
-                print("1")
+                detectar_camino_libre(jugadores, cancha)
             case _:
                 continuar=False
         mostrar_cancha(cancha)
