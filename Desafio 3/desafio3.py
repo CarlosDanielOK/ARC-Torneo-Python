@@ -2,26 +2,31 @@ FILAS = 40
 COLUMNAS = 60
 ROLES_VALIDOS  = ["arquero", "defensor", "mediocampista", "delantero"]
 EQUIPOS_VALIDOS = ["A", "B"]
-JUGADORES = [
-    # Jugador con pelota
-    {"nombre": "Pelota",    "equipo": "A", "fila": 10, "columna": 20, "rol": "mediocampista", "tiene_pelota": True},
-    
-    # Misma fila, distintas columnas
-    {"nombre": "CompA_Izq", "equipo": "A", "fila": 10, "columna": 15, "rol": "delantero",      "tiene_pelota": False},  # izq, libre
-    {"nombre": "RivalIzq",  "equipo": "B", "fila": 10, "columna": 12, "rol": "defensor",       "tiene_pelota": False},  # izq, rival bloqueador
-    {"nombre": "CompA_Izq2","equipo": "A", "fila": 10, "columna": 8,  "rol": "defensor",       "tiene_pelota": False},  # izq, detrás del rival
-    {"nombre": "CompA_Der", "equipo": "A", "fila": 10, "columna": 25, "rol": "delantero",      "tiene_pelota": False},  # der, libre
-    {"nombre": "RivalDer",  "equipo": "B", "fila": 10, "columna": 30, "rol": "defensor",       "tiene_pelota": False},  # der, rival bloqueador
-    {"nombre": "CompA_Der2","equipo": "A", "fila": 10, "columna": 35, "rol": "mediocampista",  "tiene_pelota": False},  # der, detrás del rival
-
-    # Misma columna, distintas filas
-    {"nombre": "CompA_Arr", "equipo": "A", "fila": 5,  "columna": 20, "rol": "defensor",       "tiene_pelota": False},  # arriba, libre
-    {"nombre": "RivalArr",  "equipo": "B", "fila": 3,  "columna": 20, "rol": "mediocampista",  "tiene_pelota": False},  # arriba, rival bloqueador
-    {"nombre": "CompA_Aba", "equipo": "A", "fila": 15, "columna": 20, "rol": "defensor",       "tiene_pelota": False},  # abajo, libre
-    {"nombre": "RivalAba",  "equipo": "B", "fila": 18, "columna": 20, "rol": "delantero",      "tiene_pelota": False},  # abajo, rival bloqueador
-
-    # Jugadores que NO deben aparecer (diagonal)
-    {"nombre": "Diagonal",  "equipo": "A", "fila": 15, "columna": 25, "rol": "delantero",      "tiene_pelota": False},  # diagonal, ignorar
+JUGADORES = JUGADORES = [
+    # Argentina
+    {"nombre": "Romero",     "equipo": "A", "fila": 20, "columna": 2,  "rol": "arquero",        "tiene_pelota": False},
+    {"nombre": "Otamendi",   "equipo": "A", "fila": 12, "columna": 8,  "rol": "defensor",        "tiene_pelota": False},
+    {"nombre": "Lisandro",   "equipo": "A", "fila": 20, "columna": 10, "rol": "defensor",        "tiene_pelota": False},
+    {"nombre": "Tagliafico", "equipo": "A", "fila": 28, "columna": 12, "rol": "defensor",        "tiene_pelota": False},
+    {"nombre": "Molina",     "equipo": "A", "fila": 6,  "columna": 15, "rol": "defensor",        "tiene_pelota": False},
+    {"nombre": "DePaul",     "equipo": "A", "fila": 14, "columna": 20, "rol": "mediocampista",   "tiene_pelota": True},
+    {"nombre": "MacAllister", "equipo": "A", "fila": 20, "columna": 22, "rol": "mediocampista",  "tiene_pelota": False},
+    {"nombre": "Fernandez",  "equipo": "A", "fila": 26, "columna": 25, "rol": "mediocampista",   "tiene_pelota": False},
+    {"nombre": "DiMaria",    "equipo": "A", "fila": 8,  "columna": 35, "rol": "delantero",       "tiene_pelota": False},  # mitad ofensiva, libre
+    {"nombre": "Messi",      "equipo": "A", "fila": 16, "columna": 40, "rol": "delantero",       "tiene_pelota": False},  # mitad ofensiva, bloqueado por Militao
+    {"nombre": "Alvarez",    "equipo": "A", "fila": 25, "columna": 20, "rol": "delantero",       "tiene_pelota": False},  # no en mitad ofensiva
+    # Brasil
+    {"nombre": "Alisson",    "equipo": "B", "fila": 20, "columna": 57, "rol": "arquero",         "tiene_pelota": False},
+    {"nombre": "Marquinhos", "equipo": "B", "fila": 12, "columna": 52, "rol": "defensor",        "tiene_pelota": False},
+    {"nombre": "Silva",      "equipo": "B", "fila": 20, "columna": 50, "rol": "defensor",        "tiene_pelota": False},
+    {"nombre": "Militao",    "equipo": "B", "fila": 16, "columna": 45, "rol": "defensor",        "tiene_pelota": False},  # bloquea a Messi
+    {"nombre": "Danilo",     "equipo": "B", "fila": 6,  "columna": 45, "rol": "defensor",        "tiene_pelota": False},
+    {"nombre": "Casemiro",   "equipo": "B", "fila": 14, "columna": 40, "rol": "mediocampista",   "tiene_pelota": False},
+    {"nombre": "Paqueta",    "equipo": "B", "fila": 20, "columna": 38, "rol": "mediocampista",   "tiene_pelota": False},
+    {"nombre": "Gomes",      "equipo": "B", "fila": 26, "columna": 35, "rol": "mediocampista",   "tiene_pelota": False},
+    {"nombre": "Raphinha",   "equipo": "B", "fila": 8,  "columna": 25, "rol": "delantero",       "tiene_pelota": False},  # mitad ofensiva BRA, libre
+    {"nombre": "Rodrygo",    "equipo": "B", "fila": 18, "columna": 22, "rol": "delantero",       "tiene_pelota": False},  # mitad ofensiva BRA, bloqueado por DePaul
+    {"nombre": "Neymar",     "equipo": "B", "fila": 30, "columna": 38, "rol": "delantero",       "tiene_pelota": False},  # no en mitad ofensiva BRA
 ]
 import os
 
@@ -455,9 +460,46 @@ def camino_libre_al_arco(jugador, cancha):
     return True
 
 
+def camino_libre_al_arco(jugador, cancha):
+    """
+    Verifica si un delantero tiene camino libre al arco rival en su misma fila.
+
+    Args:
+        jugador (dict): Jugador a verificar {nombre, fila, columna, equipo, rol, tiene_pelota}
+        cancha (list): Matriz de 40x60 con el estado actual del partido
+
+    Returns:
+        bool: True si tiene camino libre, False si no
+    """
+    if jugador["rol"] != "delantero":
+        return False
+
+    equipo  = jugador["equipo"]
+    fila    = jugador["fila"]
+    columna = jugador["columna"]
+
+    if equipo == "A":
+        if columna < 30:
+            return False
+        rival = "B"
+        celdas = range(columna + 1, COLUMNAS)
+    else:
+        if columna > 29:
+            return False
+        rival = "A"
+        celdas = range(columna - 1, -1, -1)
+
+    for col in celdas:
+        celda = cancha[fila][col]
+        if celda == rival or celda == "X":
+            return False
+
+    return True
+
+
 def detectar_camino_libre(jugadores, cancha):
     """
-    Recorre todos los jugadores y detecta cuáles tienen camino libre al arco rival.
+    Recorre todos los delanteros y detecta cuáles tienen camino libre al arco rival.
 
     Args:
         jugadores (list): Lista de jugadores [{nombre, fila, columna, equipo, rol, tiene_pelota}]
@@ -476,14 +518,15 @@ def detectar_camino_libre(jugadores, cancha):
             continue
 
         hay_delanteros = True
-        nombre  = jugador["nombre"]
-        equipo  = jugador["equipo"]
-        columna = jugador["columna"]
+        nombre       = jugador["nombre"]
+        equipo       = jugador["equipo"]
+        columna      = jugador["columna"]
+        equipo_nombre = "ARG" if equipo == "A" else "BRA"
 
         if camino_libre_al_arco(jugador, cancha):
-            print(f"║ ✅ {nombre:<20} ({equipo}) col {columna:<3} LIBRE    ║")
+            print(f"║ ✅ {nombre:<20} {equipo_nombre} col {columna:<3} LIBRE    ║")
         else:
-            print(f"║ ❌ {nombre:<20} ({equipo}) col {columna:<3} BLOQUEADO║")
+            print(f"║ ❌ {nombre:<20} {equipo_nombre} col {columna:<3} BLOQUEADO║")
 
     if not hay_delanteros:
         print("║  No hay delanteros registrados               ║")
