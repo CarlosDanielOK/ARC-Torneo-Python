@@ -3,31 +3,32 @@ COLUMNAS = 60
 ROLES_VALIDOS  = ["arquero", "defensor", "mediocampista", "delantero"]
 EQUIPOS_VALIDOS = ["A", "B"]
 JUGADORES = [
-    # Argentina
-    {"nombre": "Romero",     "equipo": "A", "fila": 20, "columna": 2,  "rol": "arquero",        "tiene_pelota": False},
-    {"nombre": "Otamendi",   "equipo": "A", "fila": 12, "columna": 8,  "rol": "defensor",        "tiene_pelota": False},
-    {"nombre": "Lisandro",   "equipo": "A", "fila": 20, "columna": 10, "rol": "defensor",        "tiene_pelota": False},
-    {"nombre": "Tagliafico", "equipo": "A", "fila": 28, "columna": 12, "rol": "defensor",        "tiene_pelota": False},
-    {"nombre": "Molina",     "equipo": "A", "fila": 6,  "columna": 15, "rol": "defensor",        "tiene_pelota": False},
-    {"nombre": "DePaul",     "equipo": "A", "fila": 14, "columna": 20, "rol": "mediocampista",   "tiene_pelota": True},
-    {"nombre": "MacAllister", "equipo": "A", "fila": 20, "columna": 22, "rol": "mediocampista",  "tiene_pelota": False},
-    {"nombre": "Fernandez",  "equipo": "A", "fila": 26, "columna": 25, "rol": "mediocampista",   "tiene_pelota": False},
-    {"nombre": "DiMaria",    "equipo": "A", "fila": 8,  "columna": 35, "rol": "delantero",       "tiene_pelota": False},  # mitad ofensiva, libre
-    {"nombre": "Messi",      "equipo": "A", "fila": 16, "columna": 40, "rol": "delantero",       "tiene_pelota": False},  # mitad ofensiva, bloqueado por Militao
-    {"nombre": "Alvarez",    "equipo": "A", "fila": 25, "columna": 20, "rol": "delantero",       "tiene_pelota": False},  # no en mitad ofensiva
-    # Brasil
-    {"nombre": "Alisson",    "equipo": "B", "fila": 20, "columna": 57, "rol": "arquero",         "tiene_pelota": False},
-    {"nombre": "Marquinhos", "equipo": "B", "fila": 12, "columna": 52, "rol": "defensor",        "tiene_pelota": False},
-    {"nombre": "Silva",      "equipo": "B", "fila": 20, "columna": 50, "rol": "defensor",        "tiene_pelota": False},
-    {"nombre": "Militao",    "equipo": "B", "fila": 16, "columna": 45, "rol": "defensor",        "tiene_pelota": False},  # bloquea a Messi
-    {"nombre": "Danilo",     "equipo": "B", "fila": 6,  "columna": 45, "rol": "defensor",        "tiene_pelota": False},
-    {"nombre": "Casemiro",   "equipo": "B", "fila": 14, "columna": 40, "rol": "mediocampista",   "tiene_pelota": False},
-    {"nombre": "Paqueta",    "equipo": "B", "fila": 20, "columna": 38, "rol": "mediocampista",   "tiene_pelota": False},
-    {"nombre": "Gomes",      "equipo": "B", "fila": 26, "columna": 35, "rol": "mediocampista",   "tiene_pelota": False},
-    {"nombre": "Raphinha",   "equipo": "B", "fila": 8,  "columna": 25, "rol": "delantero",       "tiene_pelota": False},  # mitad ofensiva BRA, libre
-    {"nombre": "Rodrygo",    "equipo": "B", "fila": 18, "columna": 22, "rol": "delantero",       "tiene_pelota": False},  # mitad ofensiva BRA, bloqueado por DePaul
-    {"nombre": "Neymar",     "equipo": "B", "fila": 30, "columna": 38, "rol": "delantero",       "tiene_pelota": False},  # no en mitad ofensiva BRA
+
+    # 🔵 Jugador con pelota (Argentina en ataque)
+    {"nombre": "DePaul", "equipo": "A", "fila": 20, "columna": 35, "rol": "mediocampista", "tiene_pelota": True},
+
+    # 🟡 Brasil presionando cerca
+    {"nombre": "Casemiro", "equipo": "B", "fila": 20, "columna": 33, "rol": "mediocampista", "tiene_pelota": False},
+    {"nombre": "Fabinho", "equipo": "B", "fila": 18, "columna": 35, "rol": "mediocampista", "tiene_pelota": False},
+
+    # 🔵 Argentina opciones de pase cortas
+    {"nombre": "Messi", "equipo": "A", "fila": 20, "columna": 38, "rol": "delantero", "tiene_pelota": False},
+    {"nombre": "Álvarez", "equipo": "A", "fila": 22, "columna": 35, "rol": "delantero", "tiene_pelota": False},
+
+    # 🟡 Brasil cerrando líneas
+    {"nombre": "Thiago_Silva", "equipo": "B", "fila": 20, "columna": 30, "rol": "defensor", "tiene_pelota": False},
+    {"nombre": "Marquinhos", "equipo": "B", "fila": 22, "columna": 35, "rol": "defensor", "tiene_pelota": False},
+
+    # 🔵 Mediocampo Argentina apoyo
+    {"nombre": "Enzo_Fernandez", "equipo": "A", "fila": 18, "columna": 35, "rol": "mediocampista", "tiene_pelota": False},
+
+    # 🟡 Brasil presión alta
+    {"nombre": "Vinicius", "equipo": "B", "fila": 25, "columna": 35, "rol": "delantero", "tiene_pelota": False},
+
+    # 🔵 Defensa Argentina
+    {"nombre": "Otamendi", "equipo": "A", "fila": 30, "columna": 35, "rol": "defensor", "tiene_pelota": False},
 ]
+
 import os
 
 def limpiar_pantalla():
@@ -478,7 +479,7 @@ def ejecutar_movimiento(jugador,cancha):
 def seleccionar_jugador_para_mover(jugadores, cancha):
 
     resultado = False
-
+    mostrar_cancha(cancha)
     mostrar_lista_jugadores(jugadores)
 
     try:
@@ -618,8 +619,79 @@ def clasificar_jugador_por_direccion(jugador, jugador_con_pelota,posibles_pases)
                 distancia_actual  = abs(jugador_con_pelota["fila"] - posibles_pases["ab"][0]["fila"]) 
                 insertar_menor_distancia(jugador, distancia_jugador, distancia_actual, posibles_pases["ab"])
 
+def menu_pases(jugador_con_pelota, posibles_pases, jugadores):
+    print("\033[96m")
+    print("╔═══════════════ Posibles pases ═══════════════╗")
+    print(f"║ Jugador con pelota : {jugador_con_pelota['nombre']:<24}║")
+    print(f"║ Posición: Fila {jugador_con_pelota['fila']:<3} Columna {jugador_con_pelota['columna']:<17} ║")
+    print("╠════════════════ OPCIONES ════════════════════╣")
 
-def detectar_pases(jugadores):
+    mapa_opciones = {}
+    contador = 1
+
+    # izquierda
+    if posibles_pases["izq"]:
+        for jugador in posibles_pases["izq"]:
+            if jugador["equipo"] == jugador_con_pelota["equipo"]:
+                print(f"║ {contador} - {jugador['nombre']} (izq){"":<28} ║")
+                mapa_opciones[contador] = jugador
+                contador += 1
+
+    # derecha
+    if posibles_pases["der"]:
+        for jugador in posibles_pases["der"]:
+            if jugador["equipo"] == jugador_con_pelota["equipo"]:
+                print(f"║ {contador} - {jugador['nombre']} (der){"":<29} ║")
+                mapa_opciones[contador] = jugador
+                contador += 1
+
+    # arriba
+    if posibles_pases["arr"]:
+        for jugador in posibles_pases["arr"]:
+            if jugador["equipo"] == jugador_con_pelota["equipo"]:
+                print(f"║ {contador} - {jugador['nombre']} (arr){"":<29} ║")
+                mapa_opciones[contador] = jugador
+                contador += 1
+
+    # abajo
+    if posibles_pases["ab"]:
+        for jugador in posibles_pases["ab"]:
+            if jugador["equipo"] == jugador_con_pelota["equipo"]:
+                print(f"║ {contador} - {jugador['nombre']} (ab){"":<28} ║")
+                mapa_opciones[contador] = jugador
+                contador += 1
+            else:
+                break
+    print(f"║ 0 - Cancelar{"":<32} ║")
+    print("╚══════════════════════════════════════════════╝")
+    print("\033[0m")
+
+    if not mapa_opciones:
+        mensaje_advertencia("No hay pases disponibles")
+        return
+
+    try:
+        opcion = int(pedir_input("Elegir pase: "))
+
+        if opcion == 0:
+            return
+
+        if opcion not in mapa_opciones:
+            mensaje_error("Opción inválida")
+            return
+
+        jugador_destino = mapa_opciones[opcion]
+
+        # 🔁 ejecutar pase directo
+        jugador_con_pelota["tiene_pelota"] = False
+        jugador_destino["tiene_pelota"] = True
+
+        mensaje_ok(f"Pase realizado a {jugador_destino['nombre']}")
+
+    except ValueError:
+        mensaje_error("Entrada inválida")
+
+def detectar_pases(jugadores,cancha):
     """
         Verifica los posibles pases en 4 direcciones distintas(arriba, abajo, izquierda y derecha)
     Args:
@@ -635,12 +707,12 @@ def detectar_pases(jugadores):
             "arr":[],
             "ab":[]
         }
-        for jugador in jugadores:
+        pasar_a_jugador=-1
+        for indice,jugador in enumerate(jugadores):
             if not jugador is jugador_con_pelota:
                 clasificar_jugador_por_direccion(jugador,jugador_con_pelota,posibles_pases)        
-        
-        mostrar_lista_posibles_pases(jugador_con_pelota,posibles_pases)
-        pedir_input("Seleccionar jugador para pasar pelota")
+        mostrar_cancha(cancha)
+        menu_pases(jugador_con_pelota, posibles_pases, jugadores)
     else:
         mensaje_error("Ningun jugador tiene la pelota")
 
@@ -759,7 +831,7 @@ def controlador_opciones(cancha,jugadores_en_cancha,jugadores):
                 distancia_pelota(jugadores_en_cancha)
 
             case 4:
-                detectar_pases(jugadores_en_cancha)
+                detectar_pases(jugadores_en_cancha,cancha)
 
             case 5:
                 detectar_camino_libre(jugadores_en_cancha, cancha)
