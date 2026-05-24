@@ -3,184 +3,26 @@ COLUMNAS = 60
 ROLES_VALIDOS  = ["arquero", "defensor", "mediocampista", "delantero"]
 EQUIPOS_VALIDOS = ["A", "B"]
 JUGADORES = [
-    {
-        "nombre": "Romero",
-        "equipo": "A",
-        "fila": 20,
-        "columna": 2,
-        "rol": "arquero",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Otamendi",
-        "equipo": "A",
-        "fila": 12,
-        "columna": 8,
-        "rol": "defensor",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Lisandro",
-        "equipo": "A",
-        "fila": 20,
-        "columna": 10,
-        "rol": "defensor",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Tagliafico",
-        "equipo": "A",
-        "fila": 28,
-        "columna": 12,
-        "rol": "defensor",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Molina",
-        "equipo": "A",
-        "fila": 6,
-        "columna": 15,
-        "rol": "defensor",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "DePaul",
-        "equipo": "A",
-        "fila": 14,
-        "columna": 20,
-        "rol": "mediocampista",
-        "tiene_pelota": True
-    },
-    {
-        "nombre": "MacAllister",
-        "equipo": "A",
-        "fila": 20,
-        "columna": 22,
-        "rol": "mediocampista",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Fernandez",
-        "equipo": "A",
-        "fila": 26,
-        "columna": 25,
-        "rol": "mediocampista",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "DiMaria",
-        "equipo": "A",
-        "fila": 8,
-        "columna": 27,
-        "rol": "delantero",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Messi",
-        "equipo": "A",
-        "fila": 16,
-        "columna": 29,
-        "rol": "delantero",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Alvarez",
-        "equipo": "A",
-        "fila": 18,
-        "columna": 31,
-        "rol": "delantero",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Alisson",
-        "equipo": "B",
-        "fila": 20,
-        "columna": 57,
-        "rol": "arquero",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Marquinhos",
-        "equipo": "B",
-        "fila": 12,
-        "columna": 52,
-        "rol": "defensor",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Silva",
-        "equipo": "B",
-        "fila": 20,
-        "columna": 50,
-        "rol": "defensor",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Militao",
-        "equipo": "B",
-        "fila": 28,
-        "columna": 48,
-        "rol": "defensor",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Danilo",
-        "equipo": "B",
-        "fila": 6,
-        "columna": 45,
-        "rol": "defensor",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Casemiro",
-        "equipo": "B",
-        "fila": 14,
-        "columna": 40,
-        "rol": "mediocampista",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Paqueta",
-        "equipo": "B",
-        "fila": 20,
-        "columna": 38,
-        "rol": "mediocampista",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Gomes",
-        "equipo": "B",
-        "fila": 26,
-        "columna": 35,
-        "rol": "mediocampista",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Raphinha",
-        "equipo": "B",
-        "fila": 8,
-        "columna": 33,
-        "rol": "delantero",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Rodrygo",
-        "equipo": "B",
-        "fila": 18,
-        "columna": 32,
-        "rol": "delantero",
-        "tiene_pelota": False
-    },
-    {
-        "nombre": "Neymar",
-        "equipo": "B",
-        "fila": 38,
-        "columna": 30,
-        "rol": "delantero",
-        "tiene_pelota": False
-    }
-]
+    # Jugador con pelota
+    {"nombre": "Pelota",    "equipo": "A", "fila": 10, "columna": 20, "rol": "mediocampista", "tiene_pelota": True},
+    
+    # Misma fila, distintas columnas
+    {"nombre": "CompA_Izq", "equipo": "A", "fila": 10, "columna": 15, "rol": "delantero",      "tiene_pelota": False},  # izq, libre
+    {"nombre": "RivalIzq",  "equipo": "B", "fila": 10, "columna": 12, "rol": "defensor",       "tiene_pelota": False},  # izq, rival bloqueador
+    {"nombre": "CompA_Izq2","equipo": "A", "fila": 10, "columna": 8,  "rol": "defensor",       "tiene_pelota": False},  # izq, detrás del rival
+    {"nombre": "CompA_Der", "equipo": "A", "fila": 10, "columna": 25, "rol": "delantero",      "tiene_pelota": False},  # der, libre
+    {"nombre": "RivalDer",  "equipo": "B", "fila": 10, "columna": 30, "rol": "defensor",       "tiene_pelota": False},  # der, rival bloqueador
+    {"nombre": "CompA_Der2","equipo": "A", "fila": 10, "columna": 35, "rol": "mediocampista",  "tiene_pelota": False},  # der, detrás del rival
 
+    # Misma columna, distintas filas
+    {"nombre": "CompA_Arr", "equipo": "A", "fila": 5,  "columna": 20, "rol": "defensor",       "tiene_pelota": False},  # arriba, libre
+    {"nombre": "RivalArr",  "equipo": "B", "fila": 3,  "columna": 20, "rol": "mediocampista",  "tiene_pelota": False},  # arriba, rival bloqueador
+    {"nombre": "CompA_Aba", "equipo": "A", "fila": 15, "columna": 20, "rol": "defensor",       "tiene_pelota": False},  # abajo, libre
+    {"nombre": "RivalAba",  "equipo": "B", "fila": 18, "columna": 20, "rol": "delantero",      "tiene_pelota": False},  # abajo, rival bloqueador
+
+    # Jugadores que NO deben aparecer (diagonal)
+    {"nombre": "Diagonal",  "equipo": "A", "fila": 15, "columna": 25, "rol": "delantero",      "tiene_pelota": False},  # diagonal, ignorar
+]
 import os
 
 def limpiar_pantalla():
@@ -425,8 +267,96 @@ def mostrar_menu():
     print("╚══════════════════════════════╝")
     print("\033[0m")
 
+def mostrar_lista_posibles_pases(jugador,jugadores_fila_izq,jugadores_fila_der,jugadores_columna_abajo,jugadores_columna_arriba):
+    print("\033[96m")
+    print("╔═══════════════ Posibles pases ═══════════════╗")
+    print(f"║ Jugador con pelota : {jugador['nombre']:<24}║")
+    print(f"║ Posición: Fila {jugador['fila']:<3} Columna {jugador['columna']:<17} ║")
+    print("╠════════════════ Columna izq  ════════════════╣")
+    if jugadores_fila_izq:
+        for jugador_fila in jugadores_fila_izq:
+            if jugador["equipo"]!=jugador_fila["equipo"]:
+                break
+            print(f"║ Jugador mas cercano : {jugador_fila['nombre']:<23}║")
+            print(f"║ Posición: Fila {jugador_fila['fila']:<3} Columna {jugador_fila['columna']:<17} ║")
+    print("╠════════════════ Columna der  ════════════════╣")
+    if jugadores_fila_der:
+        for jugador_fila in jugadores_fila_der:
+            if jugador["equipo"]!=jugador_fila["equipo"]:
+                break
+            print(f"║ Jugador mas cercano : {jugador_fila['nombre']:<23}║")
+            print(f"║ Posición: Fila {jugador_fila['fila']:<3} Columna {jugador_fila['columna']:<17} ║")
+    print("╠══════════════════  Fila    ══════════════════╣")
+    if jugadores_columna_abajo:    
+        for jugador_columna in jugadores_columna_abajo:
+            if jugador["equipo"]!=jugador_columna["equipo"]:
+                break
+            print(f"║ Jugador mas cercano : {jugador_columna['nombre']:<23}║")
+            print(f"║ Posición: Fila {jugador_columna['fila']:<3} Columna {jugador_columna['columna']:<17} ║")
+    print("╠══════════════════  Fila    ══════════════════╣")
+    if jugadores_columna_arriba:    
+        for jugador_columna in jugadores_columna_arriba:
+            if jugador["equipo"]!=jugador_columna["equipo"]:
+                break
+            print(f"║ Jugador mas cercano : {jugador_columna['nombre']:<23}║")
+            print(f"║ Posición: Fila {jugador_columna['fila']:<3} Columna {jugador_columna['columna']:<17} ║")
+    print("╚══════════════════════════════════════════════╝")
+    print("\033[0m")
 
-
+def detectar_pases(jugadores):
+    num_jugador=jugador_tiene_pelota(jugadores)
+    jugacodr_con_pelota=jugadores[num_jugador]
+    posibles_pases_fila_izq=[]
+    posibles_pases_fila_der=[]
+    posibles_pases_columna_arriba=[]
+    posibles_pases_columna_abajo=[]
+    for jugador in jugadores:
+        if jugacodr_con_pelota["fila"]==jugador["fila"] and jugacodr_con_pelota["columna"]!=jugador["columna"]:
+                diferencia_columna=jugacodr_con_pelota["columna"]-jugador["columna"]
+                if diferencia_columna < 0:
+                    if not posibles_pases_fila_der:
+                        posibles_pases_fila_der.append(jugador)
+                    else:
+                        a=abs(jugacodr_con_pelota["columna"]-jugador["columna"])
+                        b=abs(jugacodr_con_pelota["columna"]- posibles_pases_fila_der[0]["columna"])
+                        if a < b:
+                            posibles_pases_fila_der.insert(0,jugador)
+                        else:
+                            posibles_pases_fila_der.append(jugador)
+                if diferencia_columna > 0:
+                    if not posibles_pases_fila_izq:
+                        posibles_pases_fila_izq.append(jugador)
+                    else:
+                        a=abs(jugacodr_con_pelota["columna"]-jugador["columna"])
+                        b=abs(jugacodr_con_pelota["columna"]- posibles_pases_fila_izq[0]["columna"])
+                        if a < b:
+                            posibles_pases_fila_izq.insert(0,jugador)
+                        else:
+                            posibles_pases_fila_izq.append(jugador)
+        if jugacodr_con_pelota["columna"]==jugador["columna"] and jugacodr_con_pelota["fila"]!=jugador["fila"]:
+            diferencia_fila = jugacodr_con_pelota["fila"] - jugador["fila"]
+            if diferencia_fila < 0:
+                if not posibles_pases_columna_arriba:
+                    posibles_pases_columna_arriba.append(jugador)
+                else:
+                    a=abs(jugacodr_con_pelota["fila"]-jugador["fila"])
+                    b=abs(jugacodr_con_pelota["fila"]- posibles_pases_columna_arriba[0]["fila"])
+                    if a < b:
+                        posibles_pases_columna_arriba.insert(0,jugador)
+                    else:
+                        posibles_pases_columna_arriba.append(jugador)
+            if diferencia_fila > 0:
+                if not posibles_pases_columna_abajo:
+                    posibles_pases_columna_abajo.append(jugador)
+                else:
+                    a=abs(jugacodr_con_pelota["fila"]-jugador["fila"])
+                    b=abs(jugacodr_con_pelota["fila"]- posibles_pases_columna_abajo[0]["fila"])
+                    if a < b:
+                        posibles_pases_columna_abajo.insert(0,jugador)
+                    else:
+                        posibles_pases_columna_abajo.append(jugador)
+        
+    mostrar_lista_posibles_pases(jugacodr_con_pelota,posibles_pases_fila_izq,posibles_pases_fila_der,posibles_pases_columna_abajo,posibles_pases_columna_arriba)
 def controlador_opciones(cancha,jugadores):
 
     continuar=True
@@ -446,7 +376,7 @@ def controlador_opciones(cancha,jugadores):
             case 3:
                 distancia_pelota(jugadores)
             case 4:
-                print("1")
+                detectar_pases(jugadores)
             case 5:
                 print("1")
             case _:
