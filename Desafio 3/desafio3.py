@@ -55,7 +55,9 @@ def mostrar_celda(celda):
     else:
         return "."
 def pedir_input(mensaje):
-    return input(f"\033[96m  ➜  {mensaje}\033[0m ")
+    entrada=input(f"\033[96m  ➜  {mensaje}\033[0m ")
+    limpiar_pantalla()
+    return entrada
 
 def mostrar_cancha(cancha):
         print("    ", end="")
@@ -83,14 +85,17 @@ def mostrar_menu_movimientos(jugador):
     print("╚══════════════════════════════════════════════╝")
     print("\033[0m")
 
-def mostrar_jugador_cercano(jugador_pelota,jugador_cercano):
+def mostrar_jugadores_cercanos(jugador_pelota, jugadores_cercanos):
+
     print("\033[96m")
     print("╔══════════════════════════════════════════════╗")
     print(f"║ Jugador con pelota : {jugador_pelota['nombre']:<24}║")
-    print(f"║ Posición: Fila {jugador_pelota['fila']:<3} Columna {jugador_pelota['columna']:<17} ║")
-    print("╠══════════════════════════════════════════════╣")
-    print(f"║ Jugador mas cercano : {jugador_cercano['nombre']:<23}║")
-    print(f"║ Posición: Fila {jugador_cercano['fila']:<3} Columna {jugador_cercano['columna']:<17} ║")
+    print(f"║ Posición: Fila {jugador_pelota['fila']:<4} Columna {jugador_pelota['columna']:<17}║")
+    print("╠══════════════ Jugadores Cercanos  ═══════════╣")
+
+    for jugador in jugadores_cercanos:
+        print(f"║ {jugador['nombre']:<26} F:{jugador['fila']:<6} C:{jugador['columna']:<6} ║")
+
     print("╚══════════════════════════════════════════════╝")
     print("\033[0m")
 
@@ -385,36 +390,49 @@ def ejecutar_movimiento(jugador,cancha):
     se_movio=False
     match movimiento:
         case "arriba":
-            if fila-1 >= 0 and cancha[fila-1][columna]=='.' :
-                print("arriba")
-                cancha[fila-1][columna]=jugador["equipo"]
-                jugador["fila"]=fila-1
-                se_movio=True
-            else: 
-                raise IndexError("No se puede mover a esa posicion")
+            arriba=fila-1
+            if arriba >= 0 and cancha[arriba][columna] == '.':
+                cancha[arriba][columna] = jugador["equipo"]  # ← modifica la matriz
+                jugador["fila"] = arriba
+                mensaje_ok(f"{jugador['nombre']} se movió ⬆ arriba")
+                se_movio = True
+            else:
+                mensaje_error("Movimiento inválido: posición fuera de límites o celda ocupada")
+                se_movio = False
+
         case "abajo":
-            if fila+1< FILAS and cancha[fila+1][columna]=='.':
-                cancha[fila+1][columna]=jugador["equipo"]
-                jugador["fila"]=fila+1
+            abajo=fila+1
+            if abajo< FILAS and cancha[abajo][columna]=='.':
+                cancha[abajo][columna]=jugador["equipo"]
+                jugador["fila"]=abajo
+                mensaje_ok(f"{jugador['nombre']} se movió ⬇ abajo")
                 se_movio=True
             else:
-                raise IndexError("No se puede mover a esa pocision")
+                mensaje_error("Movimiento inválido: posición fuera de límites o celda ocupada")
+                se_movio = False
         case "izquierda":
-            if columna-1 >= 0 and cancha[fila][columna-1]=='.':
-                cancha[fila][columna-1]=jugador["equipo"]
-                jugador["columna"]=columna-1
-                se_movio=True
-            else: 
-                raise IndexError("No se puede mover a esa pocision")
-        case "derecha":
-            if columna+1< COLUMNAS and cancha[fila][columna+1]=='.':
-                cancha[fila][columna+1]=jugador["equipo"]
-                jugador["columna"]=columna+1
+            izquierda=columna-1
+            if izquierda >= 0 and cancha[fila][izquierda]=='.':
+                mensaje_ok(f"{jugador['nombre']} se movió ⬅ izquierda")
+                cancha[fila][izquierda]=jugador["equipo"]
+                jugador["columna"]=izquierda
                 se_movio=True
             else:
-                raise IndexError("No se puede mover a esa pocision")
+                mensaje_error("Movimiento inválido: posición fuera de límites o celda ocupada")
+                se_movio = False
+        case "derecha":
+            derecha=columna+1
+            if derecha< COLUMNAS and cancha[fila][derecha]=='.':
+                cancha[fila][derecha]=jugador["equipo"]
+                jugador["columna"]=derecha
+                mensaje_ok(f"{jugador['nombre']} se movió ➡ derecha")
+                se_movio=True
+            else:
+                mensaje_error("Movimiento inválido: posición fuera de límites o celda ocupada")
+                se_movio = False
         case _:
-            raise print()
+            mensaje_advertencia("Movimiento cancelado")
+            se_movio = False
     if se_movio:
         cancha[fila][columna]="."
 
@@ -440,12 +458,9 @@ def seleccionar_jugador_para_mover(jugadores,cancha):
     if jugador_index < 0:
             se_movio=True
     else:
-        try:
             jugador_seleccionado=jugadores[jugador_index]
             se_movio = ejecutar_movimiento(jugador_seleccionado,cancha)
-        except Exception as e:
-                mensaje_error("Opxion invalida")
-        
+
     return se_movio
 
 def mover_jugadores(jugadores,cancha):
@@ -465,16 +480,17 @@ def mover_jugadores(jugadores,cancha):
 #### Distancia de jugadores
 def jugador_mas_cercano(indice_con_pelota,jugadores):
     jugador_con_pelota = jugadores[indice_con_pelota]
-    # jugador_cercanos=[]
     distancia_menor = FILAS+COLUMNAS
-    jugador_cercano = None
-    for numero_jugador,jugador in enumerate(jugadores):
+    jugadores_cercanos=[]
+    for jugador in jugadores:
         distancia = abs(jugador_con_pelota["fila"] - jugador["fila"]) + abs(jugador_con_pelota["columna"] - jugador["columna"])
-        if distancia < distancia_menor and distancia != 0:
-            jugador_cercano = numero_jugador
-            distancia_menor=distancia
-    
-    return jugadores[jugador_cercano]
+        if distancia != 0:
+            if distancia < distancia_menor:
+                distancia_menor = distancia
+                jugadores_cercanos = [jugador]
+            elif distancia == distancia_menor:
+                jugadores_cercanos.append(jugador)
+    return jugadores_cercanos
 
 def distancia_pelota(jugadores):
     """
@@ -483,8 +499,8 @@ def distancia_pelota(jugadores):
     """
     indice_jugador=indice_jugador_con_pelota(jugadores)
     if indice_jugador >= 0:
-        jugador_cercano=jugador_mas_cercano(indice_jugador,jugadores)
-        mostrar_jugador_cercano(jugadores[indice_jugador],jugador_cercano)
+        jugadores_cercanos=jugador_mas_cercano(indice_jugador,jugadores)
+        mostrar_jugadores_cercanos(jugadores[indice_jugador], jugadores_cercanos)
     else:
         mensaje_error("Nadie tiene el balón")
 
