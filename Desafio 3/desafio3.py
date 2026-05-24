@@ -88,16 +88,19 @@ def mostrar_menu_movimientos(jugador):
 
 def mostrar_jugadores_cercanos(jugador_pelota, jugadores_cercanos):
 
+    equipo_pelota = "ARG" if jugador_pelota["equipo"] == "A" else "BRA"
+
     print("\033[96m")
     print("╔══════════════════════════════════════════════╗")
     print("║              JUGADORES CERCANOS              ║")
     print("╠══════════════════════════════════════════════╣")
     print(f"║ Jugador con pelota : {jugador_pelota['nombre']:<24}║")
-    print(f"║ Posición: Fila {jugador_pelota['fila']:<4} Columna {jugador_pelota['columna']:<17}║")
-    print("╠══════════════ Jugadores Cercanos  ═══════════╣")
+    print(f"║ Equipo:{equipo_pelota}  Fila {jugador_pelota['fila']:<3} Columna {jugador_pelota['columna']:<16}║")
+    print("╠══════════════════════════════════════════════╣")
 
     for jugador in jugadores_cercanos:
-        print(f"║ {jugador['nombre']:<26} F:{jugador['fila']:<6} C:{jugador['columna']:<6} ║")
+        equipo_nombre = "ARG" if jugador["equipo"] == "A" else "BRA"
+        print(f"║ {jugador['nombre']:<16} {equipo_nombre} F:{jugador['fila']:<4} C:{jugador['columna']:<10}     ║")
 
     print("╚══════════════════════════════════════════════╝")
     print("\033[0m")
@@ -532,7 +535,7 @@ def jugador_mas_cercano(indice_con_pelota,jugadores,distancia_todos_jugadores):
                 "jugador": jugador,
                 "distancia": distancia
             })
-            if distancia < distancia_menor and jugador["equipo"] == jugador_con_pelota["equipo"]:
+            if distancia < distancia_menor:
                 distancia_menor = distancia
                 jugadores_cercanos = [jugador]
             elif distancia == distancia_menor:
