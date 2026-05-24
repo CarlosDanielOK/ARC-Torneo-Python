@@ -68,7 +68,7 @@ def mostrar_cancha(cancha):
         print()
         for index,fila in enumerate(cancha):
             print(f"{index:<4}",end="")
-            print(f"{"":<2}".join(mostrar_celda(celda) for celda in fila))
+            print("  ".join(mostrar_celda(celda) for celda in fila))
 
 def mostrar_menu_movimientos(jugador):
     print("\033[96m")
@@ -89,6 +89,8 @@ def mostrar_jugadores_cercanos(jugador_pelota, jugadores_cercanos):
 
     print("\033[96m")
     print("╔══════════════════════════════════════════════╗")
+    print("║              JUGADORES CERCANOS              ║")
+    print("╠══════════════════════════════════════════════╣")
     print(f"║ Jugador con pelota : {jugador_pelota['nombre']:<24}║")
     print(f"║ Posición: Fila {jugador_pelota['fila']:<4} Columna {jugador_pelota['columna']:<17}║")
     print("╠══════════════ Jugadores Cercanos  ═══════════╣")
@@ -121,6 +123,29 @@ def mostrar_lista_jugadores(jugadores):
     print("╠══════╩══════════════╩═════════╩════════════════╩═══════╩══════════╣")
     print("║  0 - Regresar                                                     ║")
     print("╚═══════════════════════════════════════════════════════════════════╝")
+    print("\033[0m")
+
+def mostrar_distancia_todos(jugador_pelota, distancia_todos_jugadores):
+
+    print("\033[96m")
+
+    print("╔════════════════ Distancias ══════════════════╗")
+    print(f"║ Jugador con pelota : {jugador_pelota['nombre']:<24}║")
+    print("╠══════════════════════════════════════════════╣")
+
+    for info in distancia_todos_jugadores:
+
+        jugador = info["jugador"]
+        distancia = info["distancia"]
+
+        print(
+            f"║ {jugador['nombre']:<18} "
+            f" {jugador['equipo']:<3} "
+            f"Distancia: {distancia:<10}║"
+        )
+
+    print("╚══════════════════════════════════════════════╝")
+
     print("\033[0m")
 
 def mostrar_menu():
@@ -246,7 +271,7 @@ def registrar_jugadores(jugadores,cancha,jugadores_en_cancha):
         if valido:
             posicionar_jugador(jugador, cancha,jugadores_en_cancha)
         else:
-            mensaje_error(f"{jugador["nombre"]} - No cumple con los parametros")
+            mensaje_error(f"{jugador['nombre']} - No cumple con los parametros")
     mensaje_ok("Jugadores posicionados correctamente")
 
 def agregar_jugador(cancha, jugadores_en_cancha):
@@ -339,17 +364,20 @@ def generar_partido(cancha,jugadores_en_cancha,jugadores):
 
     # Menu de opcion de registro de jugadores
     mostrar_opciones_registro()
-    opcion = int(pedir_input("Elija una opción"))
-    # Opciones de ejecución
-    match opcion:
-        case 1:
-            registrar_jugadores(jugadores,cancha,jugadores_en_cancha)
-        case 2:
-            agregar_jugador(cancha,jugadores_en_cancha)
-        case 0 :
-            mensaje_info("Regresando...")
-        case _:
-            mensaje_error("Opcion invalida")
+    try:
+        opcion = int(pedir_input("Seleccione una opcion: "))
+        match opcion:
+            case 1:
+                registrar_jugadores(jugadores,cancha,jugadores_en_cancha)
+            case 2:
+                agregar_jugador(cancha,jugadores_en_cancha)
+            case 0 :
+                mensaje_info("Regresando...")
+            case _:
+                mensaje_error("Opcion invalida")
+    except ValueError:
+        mensaje_error("Ingrese una opcion valida")
+
 
 #### MOVER JUGADORES 
 
@@ -359,10 +387,19 @@ def elegir_movimientos(jugador):
     movimiento="cancelar"
     mostrar_menu_movimientos(jugador)
 
-    direccion=int(pedir_input("Seleccion una opción:"))
-    if direccion > 0:
-        movimiento=movimientos_posibles[direccion-1]
+    try:
+        opcion = int(pedir_input("Seleccione una opcion: "))
+        if 1 <= opcion <= 4:
+            movimiento = movimientos_posibles[opcion - 1]
 
+        elif opcion == 0:
+            movimiento = "cancelar"
+
+        else:
+            mensaje_error("Opción inválida")
+    except ValueError:
+        mensaje_error("Ingrese un número válido")
+        
     return movimiento    
 
 def ejecutar_movimiento(jugador,cancha):
@@ -438,54 +475,63 @@ def ejecutar_movimiento(jugador,cancha):
 
     return se_movio
 
-def seleccionar_jugador_para_mover(jugadores,cancha):
-    """Selecciono el jugador que realizara el movimiento
+def seleccionar_jugador_para_mover(jugadores, cancha):
 
-    Args:
-        jugadores List[dict]: lista de jugadores presentes en la cancha
-        cancha List[List]: Matriz de 40x60 que representa la cancha 
-
-
-    Returns:
-        Bool: True si se logro realizar el movimiento
-    """
-
-    se_movio = False
+    resultado = False
 
     mostrar_lista_jugadores(jugadores)
-    jugador_index=int(pedir_input("Seleccione un jugador para mover: "))-1
-    
-    if jugador_index < 0:
-            se_movio=True
-    else:
-            jugador_seleccionado=jugadores[jugador_index]
-            se_movio = ejecutar_movimiento(jugador_seleccionado,cancha)
 
-    return se_movio
+    try:
+        jugador_index = int(pedir_input("Seleccione un jugador para mover: ")) - 1
 
-def mover_jugadores(jugadores,cancha):
-    """
-    Verifica se se realizao el movimiento , si no se pudo , devolemos un mensaje de error
+        if jugador_index == -1:
 
-    Args:
-        jugadores List[dict]: lista de jugadores presentes en la cancha
-        cancha List[List]: Matriz de 40x60 que representa la cancha 
-    """
+            resultado = "salir"
 
-    se_movio=False
-    se_movio = seleccionar_jugador_para_mover(jugadores,cancha)  
-    if not se_movio:
-        mensaje_error("No se pudo realizar el movimiento")         
+        elif 0 <= jugador_index < len(jugadores):
+
+            jugador_seleccionado = jugadores[jugador_index]
+
+            resultado = ejecutar_movimiento(jugador_seleccionado, cancha)
+
+        else:
+            mensaje_error("Jugador fuera de rango")
+
+    except ValueError:
+        mensaje_error("Ingrese un número válido")
+
+    return resultado
+
+def mover_jugadores(jugadores, cancha):
+
+    continuar = True
+
+    while continuar:
+
+        resultado = seleccionar_jugador_para_mover(jugadores, cancha)
+
+        if resultado == "salir":
+            continuar = False
+
+        elif resultado:
+            mensaje_ok("Movimiento realizado")
+
+        else:
+            mensaje_error("No se pudo realizar el movimiento")        
 
 #### Distancia de jugadores
-def jugador_mas_cercano(indice_con_pelota,jugadores):
+def jugador_mas_cercano(indice_con_pelota,jugadores,distancia_todos_jugadores):
     jugador_con_pelota = jugadores[indice_con_pelota]
     distancia_menor = FILAS+COLUMNAS
     jugadores_cercanos=[]
     for jugador in jugadores:
         distancia = abs(jugador_con_pelota["fila"] - jugador["fila"]) + abs(jugador_con_pelota["columna"] - jugador["columna"])
         if distancia != 0:
-            if distancia < distancia_menor:
+            distancia_todos_jugadores.append({
+                "jugador": jugador,
+                "distancia": distancia
+            })
+            if distancia < distancia_menor and jugador["equipo"] == jugador_con_pelota["equipo"]:
                 distancia_menor = distancia
                 jugadores_cercanos = [jugador]
             elif distancia == distancia_menor:
@@ -498,9 +544,17 @@ def distancia_pelota(jugadores):
         Jugadores [dict]: Lista de jugadores, [jugador{nombre,fila,columna,equipo,rol,tiene_pelota}]
     """
     indice_jugador=indice_jugador_con_pelota(jugadores)
+    distancia_todos_jugadores=[]
     if indice_jugador >= 0:
-        jugadores_cercanos=jugador_mas_cercano(indice_jugador,jugadores)
-        mostrar_jugadores_cercanos(jugadores[indice_jugador], jugadores_cercanos)
+        jugadores_cercanos=jugador_mas_cercano(indice_jugador,jugadores,distancia_todos_jugadores)
+        mostrar_distancia_todos(
+            jugadores[indice_jugador],
+            distancia_todos_jugadores
+        )
+        mostrar_jugadores_cercanos(
+            jugadores[indice_jugador],
+            jugadores_cercanos)
+        pedir_input("Enter para continuar...")
     else:
         mensaje_error("Nadie tiene el balón")
 
@@ -671,26 +725,48 @@ def detectar_camino_libre(jugadores, cancha):
 
 def controlador_opciones(cancha,jugadores_en_cancha,jugadores):
 
-    continuar=True
-    while continuar:
-        mostrar_menu()
+    continuar = True
 
-        opcion=int(pedir_input("Seleccione una opcion: "))
+    while continuar:
+
+
+        opcion_valida = False
+
+        while not opcion_valida:
+            mostrar_menu()
+
+            try:
+                opcion = int(pedir_input("Seleccione una opcion: "))
+
+                if 0 <= opcion <= 5:
+                    opcion_valida = True
+                else:
+                    mensaje_error("Opción fuera de rango")
+
+            except ValueError:
+                mensaje_error("Ingrese un número válido")
+
         limpiar_pantalla()
 
         match opcion:
             case 1:
                 generar_partido(cancha,jugadores_en_cancha,jugadores)
+
             case 2:
-                mover_jugadores(jugadores_en_cancha,cancha)         
+                mover_jugadores(jugadores_en_cancha,cancha)
+
             case 3:
                 distancia_pelota(jugadores_en_cancha)
+
             case 4:
                 detectar_pases(jugadores_en_cancha)
+
             case 5:
                 detectar_camino_libre(jugadores_en_cancha, cancha)
-            case _:
-                continuar=False
+
+            case 0:
+                continuar = False
+
         mostrar_cancha(cancha)
 
 def menu(cancha,jugadores_en_cancha):
