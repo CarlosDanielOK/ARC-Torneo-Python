@@ -460,43 +460,6 @@ def camino_libre_al_arco(jugador, cancha):
     return True
 
 
-def camino_libre_al_arco(jugador, cancha):
-    """
-    Verifica si un delantero tiene camino libre al arco rival en su misma fila.
-
-    Args:
-        jugador (dict): Jugador a verificar {nombre, fila, columna, equipo, rol, tiene_pelota}
-        cancha (list): Matriz de 40x60 con el estado actual del partido
-
-    Returns:
-        bool: True si tiene camino libre, False si no
-    """
-    if jugador["rol"] != "delantero":
-        return False
-
-    equipo  = jugador["equipo"]
-    fila    = jugador["fila"]
-    columna = jugador["columna"]
-
-    if equipo == "A":
-        if columna < 30:
-            return False
-        rival = "B"
-        celdas = range(columna + 1, COLUMNAS)
-    else:
-        if columna > 29:
-            return False
-        rival = "A"
-        celdas = range(columna - 1, -1, -1)
-
-    for col in celdas:
-        celda = cancha[fila][col]
-        if celda == rival or celda == "X":
-            return False
-
-    return True
-
-
 def detectar_camino_libre(jugadores, cancha):
     """
     Recorre todos los delanteros y detecta cuáles tienen camino libre al arco rival.
