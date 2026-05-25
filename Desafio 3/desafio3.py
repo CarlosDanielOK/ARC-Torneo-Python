@@ -2,6 +2,11 @@ FILAS = 40
 COLUMNAS = 60
 ROLES_VALIDOS  = ["arquero", "defensor", "mediocampista", "delantero"]
 EQUIPOS_VALIDOS = ["A", "B"]
+
+ARBITRO = {
+    "fila": 15,
+    "columna": 30
+}
 JUGADORES = [
 
     # 🔵 Jugador con pelota (Argentina en ataque)
@@ -29,24 +34,48 @@ JUGADORES = [
     {"nombre": "Otamendi", "equipo": "A", "fila": 30, "columna": 35, "rol": "defensor", "tiene_pelota": False},
 ]
 
+import random
 import os
 
 def limpiar_pantalla():
+    """Limpia la consola según el sistema operativo (Windows o Unix)."""
     os.system("cls" if os.name == "nt" else "clear")
 
 def mensaje_ok(texto):
+    """Imprime un mensaje de éxito en color verde con ícono ✅.
+    Args:
+        texto (str): Mensaje a mostrar.
+    """
     print(f"\033[92m✅ {texto}\033[0m")       # verde
 
 def mensaje_error(texto):
+    """Imprime un mensaje de error en color rojo con ícono ❌.
+    Args:
+        texto (str): Mensaje a mostrar.
+    """
     print(f"\033[91m❌ {texto}\033[0m")        # rojo
 
 def mensaje_advertencia(texto):
+    """Imprime un mensaje de advertencia en color amarillo con ícono ⚠️.
+    Args:
+        texto (str): Mensaje a mostrar.
+    """
     print(f"\033[93m⚠️  {texto}\033[0m")      # amarillo
 
 def mensaje_info(texto):
+    """Imprime un mensaje informativo en color azul con ícono ℹ️.
+    Args:
+        texto (str): Mensaje a mostrar.
+    """
     print(f"\033[94mℹ️  {texto}\033[0m")      # azul
 
 def mostrar_celda(celda):
+    """Devuelve la representación visual con color ANSI de una celda de la cancha.
+    Args:
+        celda (str): Contenido de la celda ('A', 'B', 'X' o '.').
+    Returns:
+        str: Cadena con código de color ANSI y el carácter de la celda.
+    """
     if celda == "A":
         return "\033[94mA\033[0m"   # azul - Argentina
     elif celda == "B":
@@ -56,22 +85,83 @@ def mostrar_celda(celda):
     else:
         return "."
 def pedir_input(mensaje):
+    """Solicita un dato al usuario con formato visual y limpia la pantalla al confirmar.
+    Args:
+        mensaje (str): Texto a mostrar antes del input.
+    Returns:
+        str: Valor ingresado por el usuario.
+    """
     entrada=input(f"\033[96m  ➜  {mensaje}\033[0m ")
     limpiar_pantalla()
     return entrada
 
+def mover_arbitro(arbitro, cancha):
+    """Mueve el árbitro una celda en una dirección aleatoria válida dentro de la cancha,
+    limpiando su posición anterior y actualizando la nueva.
+    Args:
+        arbitro (dict): Posición actual del árbitro {'fila': int, 'columna': int}.
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
+    """
+    # limpiar posicion anterior
+    colocar_arbitro(arbitro, cancha, limpiar=True)
+
+    direcciones = [(-1,0),(1,0),(0,-1),(0,1)]
+    random.shuffle(direcciones)
+
+    for df, dc in direcciones:
+        nueva_fila = arbitro["fila"] + df
+        nueva_col  = arbitro["columna"] + dc
+        if 0 <= nueva_fila < FILAS and 0 <= nueva_col < COLUMNAS:
+            arbitro["fila"] = nueva_fila
+            arbitro["columna"] = nueva_col
+            break
+
+    colocar_arbitro(arbitro, cancha)
+
+def colocar_arbitro(arbitro, cancha, limpiar=False):
+    """Coloca o limpia las celdas ocupadas por el árbitro y su sombra en la cancha.
+    Args:
+        arbitro (dict): Posición del árbitro {'fila': int, 'columna': int}.
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
+        limpiar (bool): Si True limpia las celdas con '.', si False las marca como 'X'.
+    """
+    fila = arbitro["fila"]
+    col  = arbitro["columna"]
+    celdas = [
+    (fila,   col),      # árbitro
+    (fila-1, col),      # sombra arriba
+    (fila+1, col),      # sombra abajo
+    (fila,   col-1),    # sombra izquierda
+    (fila,   col+1)     # sombra derecha
+]
+    
+    for f, c in celdas:
+        if 0 <= f < FILAS and 0 <= c < COLUMNAS:
+            if limpiar:
+                cancha[f][c] = "."  # limpia las X del árbitro
+            else:
+                cancha[f][c] = "X"  # coloca las X del árbitro
+
 def mostrar_cancha(cancha):
-        print("    ", end="")
+    """Muestra la cancha en consola con coordenadas de filas y columnas y colores por celda.
+    Args:
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
+    """
+    print("    ", end="")
 
-        for columna in range(COLUMNAS):
-            print(f"{columna:<3}", end="")
+    for columna in range(COLUMNAS):
+        print(f"{columna:<3}", end="")
 
-        print()
-        for index,fila in enumerate(cancha):
-            print(f"{index:<4}",end="")
-            print("  ".join(mostrar_celda(celda) for celda in fila))
+    print()
+    for index,fila in enumerate(cancha):
+        print(f"{index:<4}",end="")
+        print("  ".join(mostrar_celda(celda) for celda in fila))
 
 def mostrar_menu_movimientos(jugador):
+    """Muestra el menú de dirección de movimiento para un jugador seleccionado.
+    Args:
+        jugador (dict): Jugador a mover {nombre, fila, columna, equipo, rol, tiene_pelota}.
+    """
     print("\033[96m")
     print("╔══════════════════════════════════════════════╗")
     print(f"║  Moviendo: {jugador['nombre']:<34}║")
@@ -87,7 +177,11 @@ def mostrar_menu_movimientos(jugador):
     print("\033[0m")
 
 def mostrar_jugadores_cercanos(jugador_pelota, jugadores_cercanos):
-
+    """Muestra los jugadores más cercanos al jugador con pelota según distancia Manhattan.
+        Args:
+        jugador_pelota (dict): Jugador que posee la pelota.
+        jugadores_cercanos (list): Lista de jugadores con la menor distancia a la pelota.
+    """
     equipo_pelota = "ARG" if jugador_pelota["equipo"] == "A" else "BRA"
 
     print("\033[96m")
@@ -106,6 +200,10 @@ def mostrar_jugadores_cercanos(jugador_pelota, jugadores_cercanos):
     print("\033[0m")
 
 def mostrar_lista_jugadores(jugadores):
+    """Muestra la lista completa de jugadores en cancha en formato de tabla con sus datos.
+    Args:
+        jugadores (list): Lista de jugadores [{nombre, fila, columna, equipo, rol, tiene_pelota}].
+    """
     print("\033[96m")
     print("╔══════╦══════════════╦═════════╦════════════════╦═══════╦══════════╗")
     print("║  N°  ║    Nombre    ║ Equipo  ║      Rol       ║ Fila  ║ Columna  ║")
@@ -130,7 +228,11 @@ def mostrar_lista_jugadores(jugadores):
     print("\033[0m")
 
 def mostrar_distancia_todos(jugador_pelota, distancia_todos_jugadores):
-
+    """Muestra la distancia Manhattan de cada jugador respecto al jugador con pelota.
+    Args:
+        jugador_pelota (dict): Jugador que posee la pelota.
+        distancia_todos_jugadores (list): Lista de dicts [{'jugador': dict, 'distancia': int}].
+    """
     print("\033[96m")
 
     print("╔════════════════ Distancias ══════════════════╗")
@@ -153,6 +255,7 @@ def mostrar_distancia_todos(jugador_pelota, distancia_todos_jugadores):
     print("\033[0m")
 
 def mostrar_menu():
+    """Muestra el menú principal del programa con todas las opciones disponibles."""
     print("\033[96m")  # cian
     print("╔══════════════════════════════╗")
     print("║     LA CANCHA INTELIGENTE    ║")
@@ -166,43 +269,8 @@ def mostrar_menu():
     print("╚══════════════════════════════╝")
     print("\033[0m")
 
-def mostrar_lista_posibles_pases(jugador,posibles_pases):
-    print("\033[96m")
-    print("╔═══════════════ Posibles pases ═══════════════╗")
-    print(f"║ Jugador con pelota : {jugador['nombre']:<24}║")
-    print(f"║ Posición: Fila {jugador['fila']:<3} Columna {jugador['columna']:<17} ║")
-    print("╠════════════════ Columna izq  ════════════════╣")
-    if posibles_pases["izq"]:
-        for jugador_fila in posibles_pases["izq"]:
-            if jugador["equipo"]!=jugador_fila["equipo"]:
-                break
-            print(f"║ Jugador mas cercano : {jugador_fila['nombre']:<23}║")
-            print(f"║ Posición: Fila {jugador_fila['fila']:<3} Columna {jugador_fila['columna']:<17} ║")
-    print("╠════════════════ Columna der  ════════════════╣")
-    if posibles_pases["der"]:
-        for jugador_fila in posibles_pases["der"]:
-            if jugador["equipo"]!=jugador_fila["equipo"]:
-                break
-            print(f"║ Jugador mas cercano : {jugador_fila['nombre']:<23}║")
-            print(f"║ Posición: Fila {jugador_fila['fila']:<3} Columna {jugador_fila['columna']:<17} ║")
-    print("╠══════════════════  Fila    ══════════════════╣")
-    if posibles_pases["arr"]:
-        for jugador_columna in posibles_pases["arr"]:
-            if jugador["equipo"]!=jugador_columna["equipo"]:
-                break
-            print(f"║ Jugador mas cercano : {jugador_columna['nombre']:<23}║")
-            print(f"║ Posición: Fila {jugador_columna['fila']:<3} Columna {jugador_columna['columna']:<17} ║")
-    print("╠══════════════════  Fila    ══════════════════╣")
-    if posibles_pases["ab"]:
-        for jugador_columna in posibles_pases["ab"]:
-            if jugador["equipo"]!=jugador_columna["equipo"]:
-                break
-            print(f"║ Jugador mas cercano : {jugador_columna['nombre']:<23}║")
-            print(f"║ Posición: Fila {jugador_columna['fila']:<3} Columna {jugador_columna['columna']:<17} ║")
-    print("╚══════════════════════════════════════════════╝")
-    print("\033[0m")
-
 def mostrar_opciones_registro():
+    """Muestra el submenú de opciones para registrar jugadores en la cancha."""
     print("\033[96m")  # cian
     print("╔══════════════════════════════╗")
     print("║     LA CANCHA INTELIGENTE    ║")
@@ -214,13 +282,11 @@ def mostrar_opciones_registro():
     print("\033[0m")
 
 def indice_jugador_con_pelota(jugadores):
-    """
-    Devuelve el indice del jugador con pelota, tiene_pelota=True
-
+    """Busca y devuelve el índice del jugador que tiene la pelota.
     Args:
-        Jugadores [dict]: Lista de jugadores, [jugador{nombre,fila,columna,equipo,rol,tiene_pelota}]
+        jugadores (list): Lista de jugadores [{nombre, fila, columna, equipo, rol, tiene_pelota}].
     Returns:
-        Int: Indice del jugador con pelota 
+        int: Índice del jugador con tiene_pelota=True, o -1 si ninguno tiene la pelota.
     """
     tiene_pelota=-1
     for index,jugador in enumerate(jugadores):
@@ -232,6 +298,10 @@ def indice_jugador_con_pelota(jugadores):
 #### GENERAR CANCHA
 
 def generar_cancha():
+    """Crea y devuelve una matriz de FILAS x COLUMNAS inicializada con '.'.
+    Returns:
+        list: Matriz de FILAS x COLUMNAS con todas las celdas vacías representadas por '.'.
+    """
     cancha = []
     for fila in range(FILAS):
         fila_nueva = []
@@ -244,6 +314,15 @@ def generar_cancha():
 #### REGISTRAR JUGADORES
 
 def validar_jugador(jugador, jugadores):
+    """Valida que un jugador cumpla todos los requisitos para ser registrado en la cancha.
+    Verifica rol válido, equipo válido, posición dentro de límites,
+    celda no ocupada y que no haya otro jugador con pelota si este también la tiene.
+    Args:
+        jugador (dict): Jugador a validar {nombre, fila, columna, equipo, rol, tiene_pelota}.
+        jugadores (list): Lista de jugadores ya registrados en cancha.
+    Returns:
+        bool: True si el jugador es válido, False si no cumple alguna condición.
+    """
     if jugador["rol"] not in ROLES_VALIDOS:
         mensaje_error(f"Rol '{jugador['rol']}' inválido")
         return False
@@ -266,10 +345,22 @@ def validar_jugador(jugador, jugadores):
     return True
 
 def posicionar_jugador(jugador,cancha,jugadores_en_cancha):
-        cancha[jugador["fila"]][jugador["columna"]]=jugador["equipo"]
-        jugadores_en_cancha.append(jugador)
+    """Posiciona un jugador en la cancha y lo agrega a la lista de jugadores en cancha.
+    Args:
+        jugador (dict): Jugador a posicionar {nombre, fila, columna, equipo, rol, tiene_pelota}.
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
+        jugadores_en_cancha (list): Lista de jugadores actualmente registrados en la cancha.
+    """
+    cancha[jugador["fila"]][jugador["columna"]]=jugador["equipo"]
+    jugadores_en_cancha.append(jugador)
 
 def registrar_jugadores(jugadores,cancha,jugadores_en_cancha):
+    """Registra en la cancha una lista de jugadores validando cada uno antes de posicionarlo.
+    Args:
+        jugadores (list): Lista de jugadores a registrar.
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
+        jugadores_en_cancha (list): Lista de jugadores ya registrados en cancha.
+    """
     for jugador in jugadores:
         valido=validar_jugador(jugador,jugadores_en_cancha)
         if valido:
@@ -279,12 +370,10 @@ def registrar_jugadores(jugadores,cancha,jugadores_en_cancha):
     mensaje_ok("Jugadores posicionados correctamente")
 
 def agregar_jugador(cancha, jugadores_en_cancha):
-    """
-    Solicita los datos de un jugador por consola, los valida y lo agrega a la cancha.
-
+    """Solicita por consola los datos de un nuevo jugador, los valida y lo agrega a la cancha.
     Args:
-        cancha (list): Matriz del partido
-        jugadores_en_cancha (list): Lista de jugadores ya registrados
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
+        jugadores_en_cancha (list): Lista de jugadores ya registrados en cancha.
     """
     print("\033[96m")
     print("╔══════════════════════════════════════════════╗")
@@ -365,7 +454,12 @@ def agregar_jugador(cancha, jugadores_en_cancha):
         mensaje_error(f"{nombre} no pudo agregarse, verificá posición, equipo, rol o pelota")
 
 def generar_partido(cancha,jugadores_en_cancha,jugadores):
-
+    """Muestra el submenú de registro y ejecuta la opción elegida por el usuario.
+    Args:
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
+        jugadores_en_cancha (list): Lista de jugadores ya registrados en cancha.
+        jugadores (list): Lista base de jugadores predefinidos para carga masiva.
+    """
     # Menu de opcion de registro de jugadores
     mostrar_opciones_registro()
     try:
@@ -386,7 +480,12 @@ def generar_partido(cancha,jugadores_en_cancha,jugadores):
 #### MOVER JUGADORES 
 
 def elegir_movimientos(jugador):
-
+    """Muestra el menú de direcciones y devuelve la dirección elegida por el usuario.
+    Args:
+        jugador (dict): Jugador que se va a mover.
+    Returns:
+        str: Dirección elegida ('arriba', 'abajo', 'izquierda', 'derecha' o 'cancelar').
+    """
     movimientos_posibles=["arriba","abajo","izquierda","derecha"]
     movimiento="cancelar"
     mostrar_menu_movimientos(jugador)
@@ -407,21 +506,12 @@ def elegir_movimientos(jugador):
     return movimiento    
 
 def ejecutar_movimiento(jugador,cancha):
-    """Realiza el movimiento del jugador en la cnacha en 4 direcciones (arriba, abajo, derecha, izquierda)
-
+    """Solicita una dirección y ejecuta el movimiento del jugador en la cancha si es válido.
     Args:
-        jugador {dict}: Informacion del jugador que realizara el movimiento en la cancha 
-        cancha List[List]: Matriz de 40x60 que representa la cancha 
-
-    Raises:
-        IndexError: _description_
-        IndexError: _description_
-        IndexError: _description_
-        IndexError: _description_
-        print: _description_
-
+        jugador (dict): Jugador a mover {nombre, fila, columna, equipo, rol, tiene_pelota}.
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
     Returns:
-        bool: True si se realizo el movimiento del jugador dentro de la cancha
+        bool: True si el movimiento fue exitoso, False si fue inválido o cancelado.
     """
     fila=jugador["fila"]
     columna=jugador["columna"]
@@ -480,7 +570,13 @@ def ejecutar_movimiento(jugador,cancha):
     return se_movio
 
 def seleccionar_jugador_para_mover(jugadores, cancha):
-
+    """Muestra la lista de jugadores y permite seleccionar uno para mover.
+    Args:
+        jugadores (list): Lista de jugadores en cancha.
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
+    Returns:
+        bool | str: True si el movimiento fue exitoso, False si falló, 'salir' si canceló.
+    """
     resultado = False
     mostrar_cancha(cancha)
     mostrar_lista_jugadores(jugadores)
@@ -507,7 +603,11 @@ def seleccionar_jugador_para_mover(jugadores, cancha):
     return resultado
 
 def mover_jugadores(jugadores, cancha):
-
+    """Loop principal de movimiento: permite mover jugadores hasta que el usuario cancele.
+    Args:
+        jugadores (list): Lista de jugadores en cancha.
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
+    """
     continuar = True
 
     while continuar:
@@ -525,6 +625,15 @@ def mover_jugadores(jugadores, cancha):
 
 #### Distancia de jugadores
 def jugador_mas_cercano(indice_con_pelota,jugadores,distancia_todos_jugadores):
+    """Calcula la distancia Manhattan de todos los jugadores respecto al jugador con pelota
+    y devuelve los más cercanos, manejando empates.
+    Args:
+        indice_con_pelota (int): Índice del jugador con pelota en la lista.
+        jugadores (list): Lista de jugadores en cancha.
+        distancia_todos_jugadores (list): Lista vacía que se llena con dicts {'jugador', 'distancia'}.
+    Returns:
+        list: Lista de jugadores con la menor distancia Manhattan al jugador con pelota.
+    """
     jugador_con_pelota = jugadores[indice_con_pelota]
     distancia_menor = FILAS+COLUMNAS
     jugadores_cercanos=[]
@@ -543,9 +652,10 @@ def jugador_mas_cercano(indice_con_pelota,jugadores,distancia_todos_jugadores):
     return jugadores_cercanos
 
 def distancia_pelota(jugadores):
-    """
+    """Calcula y muestra las distancias Manhattan de todos los jugadores al jugador con pelota,
+    e indica cuáles son los más cercanos.
     Args:
-        Jugadores [dict]: Lista de jugadores, [jugador{nombre,fila,columna,equipo,rol,tiene_pelota}]
+        jugadores (list): Lista de jugadores en cancha.
     """
     indice_jugador=indice_jugador_con_pelota(jugadores)
     distancia_todos_jugadores=[]
@@ -565,9 +675,13 @@ def distancia_pelota(jugadores):
 #### DETECTAR PASES
 
 def insertar_menor_distancia(jugador,distancia_jugador,distancia_actual,posibles_pases):
-    '''
-    Inserta el jugador al inicio o al final de la la lista de pases posibles , al inicio si la distancia es la menor y si no al final
-    '''
+    """Inserta un jugador en la lista de posibles pases ordenado por distancia ascendente.
+    Args:
+        jugador (dict): Jugador a insertar.
+        distancia_jugador (int): Distancia del nuevo jugador al jugador con pelota.
+        distancia_actual (int): Distancia del primer jugador de la lista al jugador con pelota.
+        posibles_pases (list): Lista de posibles receptores de pase en una dirección.
+    """
     if distancia_jugador < distancia_actual:
         posibles_pases.insert(0,jugador)
     else:
@@ -575,15 +689,12 @@ def insertar_menor_distancia(jugador,distancia_jugador,distancia_actual,posibles
 
 
 def clasificar_jugador_por_direccion(jugador, jugador_con_pelota,posibles_pases):
-    """
-        Varifica la direccion en la que apunta el jugador con pelota al jugador que sera el posible pase, (arriba, abajo, izquierda y derecha)
+    """Clasifica un jugador en la dirección correspondiente (izq, der, arr, ab)
+    respecto al jugador con pelota, ordenando por distancia ascendente.
     Args:
-        jugador_con_pelota (dict): informacion de jugador{nombre,fila,columna,equipo,rol,tiene_pelota} con pelota
-        jugador dict: informacion de jugador{nombre,fila,columna,equipo,rol,tiene_pelota} a comparar distancia
-        posibles_pases_fila_izq (List): Lista de posibles pases en la misma fila , a la izquierda del jugador
-        posibles_pases_fila_der (List): Lista de posibles pases en la misma fila , a la derecha del jugador
-        posibles_pases_columna_arriba (List): Lista de posibles pases en la misma columna , a arriba del jugador
-        posibles_pases_columna_abajo (List): Lista de posibles pases en la misma columna , a la abajo del jugador
+        jugador (dict): Jugador a clasificar.
+        jugador_con_pelota (dict): Jugador que posee la pelota.
+        posibles_pases (dict): Diccionario con listas por dirección {'izq', 'der', 'arr', 'ab'}.
     """
     misma_fila    = jugador_con_pelota["fila"]    == jugador["fila"]
     misma_columna = jugador_con_pelota["columna"] == jugador["columna"]
@@ -622,7 +733,13 @@ def clasificar_jugador_por_direccion(jugador, jugador_con_pelota,posibles_pases)
                 distancia_actual  = abs(jugador_con_pelota["fila"] - posibles_pases["ab"][0]["fila"]) 
                 insertar_menor_distancia(jugador, distancia_jugador, distancia_actual, posibles_pases["ab"])
 
-def menu_pases(jugador_con_pelota, posibles_pases, jugadores):
+def menu_pases(jugador_con_pelota, posibles_pases):
+    """Muestra los pases posibles del jugador con pelota y permite seleccionar uno para ejecutarlo.
+    Filtra solo compañeros de equipo y transfiere la pelota al receptor elegido.
+    Args:
+        jugador_con_pelota (dict): Jugador que posee la pelota.
+        posibles_pases (dict): Diccionario con listas de jugadores por dirección {'izq', 'der', 'arr', 'ab'}.
+    """
     print("\033[96m")
     print("╔═══════════════ Posibles pases ═══════════════╗")
     print(f"║ Jugador con pelota : {jugador_con_pelota['nombre']:<24}║")
@@ -695,10 +812,11 @@ def menu_pases(jugador_con_pelota, posibles_pases, jugadores):
         mensaje_error("Entrada inválida")
 
 def detectar_pases(jugadores,cancha):
-    """
-        Verifica los posibles pases en 4 direcciones distintas(arriba, abajo, izquierda y derecha)
+    """Detecta todos los pases posibles para el jugador con pelota en las 4 direcciones
+    y muestra el menú para seleccionar y ejecutar un pase.
     Args:
-        jugadores [dict]: Lista de [jugador{nombre,fila,columna,equipo,rol,tiene_pelota}]
+        jugadores (list): Lista de jugadores en cancha.
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
     """
     indice=indice_jugador_con_pelota(jugadores) #Int
     if indice >= 0:
@@ -710,12 +828,11 @@ def detectar_pases(jugadores,cancha):
             "arr":[],
             "ab":[]
         }
-        pasar_a_jugador=-1
         for indice,jugador in enumerate(jugadores):
             if not jugador is jugador_con_pelota:
                 clasificar_jugador_por_direccion(jugador,jugador_con_pelota,posibles_pases)        
         mostrar_cancha(cancha)
-        menu_pases(jugador_con_pelota, posibles_pases, jugadores)
+        menu_pases(jugador_con_pelota, posibles_pases)
     else:
         mensaje_error("Ningun jugador tiene la pelota")
 
@@ -723,15 +840,13 @@ def detectar_pases(jugadores,cancha):
 #### CAMINO LIBRE AL ARCO
 
 def camino_libre_al_arco(jugador, cancha):
-    """
-    Verifica si un delantero tiene camino libre al arco rival en su misma fila.
-
+    """Verifica si un delantero tiene camino libre al arco rival en su misma fila.
+    Requiere que sea delantero, esté en mitad ofensiva y no haya rivales ni obstáculos.
     Args:
-        jugador (dict): Jugador a verificar {nombre, fila, columna, equipo, rol, tiene_pelota}
-        cancha (list): Matriz de 40x60 con el estado actual del partido
-
+        jugador (dict): Jugador a verificar {nombre, fila, columna, equipo, rol, tiene_pelota}.
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
     Returns:
-        bool: True si tiene camino libre, False si no
+        bool: True si tiene camino libre al arco, False si no.
     """
     if jugador["rol"] != "delantero":
         return False
@@ -760,12 +875,10 @@ def camino_libre_al_arco(jugador, cancha):
 
 
 def detectar_camino_libre(jugadores, cancha):
-    """
-    Recorre todos los delanteros y detecta cuáles tienen camino libre al arco rival.
-
+    """Recorre todos los delanteros y muestra cuáles tienen camino libre al arco rival.
     Args:
-        jugadores (list): Lista de jugadores [{nombre, fila, columna, equipo, rol, tiene_pelota}]
-        cancha (list): Matriz de 40x60 con el estado actual del partido
+        jugadores (list): Lista de jugadores en cancha.
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
     """
     print("\033[96m")
     print("╔══════════════════════════════════════════════╗")
@@ -799,7 +912,13 @@ def detectar_camino_libre(jugadores, cancha):
 #### MENU DE OPCIONES
 
 def controlador_opciones(cancha,jugadores_en_cancha,jugadores):
-
+    """Loop principal del menú: valida la opción ingresada y ejecuta la función correspondiente.
+    Mueve el árbitro automáticamente después de cada acción.
+    Args:
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
+        jugadores_en_cancha (list): Lista de jugadores actualmente registrados en cancha.
+        jugadores (list): Lista base de jugadores predefinidos para carga masiva.
+    """
     continuar = True
 
     while continuar:
@@ -843,9 +962,14 @@ def controlador_opciones(cancha,jugadores_en_cancha,jugadores):
                 continuar = False
 
         mostrar_cancha(cancha)
+        mover_arbitro(ARBITRO, cancha)
 
 def menu(cancha,jugadores_en_cancha):
-    
+    """Inicializa la vista principal limpiando la pantalla y mostrando la cancha antes del menú.
+    Args:
+        cancha (list): Matriz de FILAS x COLUMNAS que representa el estado del partido.
+        jugadores_en_cancha (list): Lista de jugadores actualmente registrados en cancha.
+    """
     limpiar_pantalla()  
     mostrar_cancha(cancha)
     controlador_opciones(cancha,jugadores_en_cancha, JUGADORES)
@@ -853,8 +977,9 @@ def menu(cancha,jugadores_en_cancha):
 #### MAIN
 
 def main():
-
+    """Punto de entrada del programa. Genera la cancha vacía e inicia el menú principal."""
     cancha = generar_cancha()
+    colocar_arbitro(ARBITRO,cancha,limpiar=False)
     jugadores_en_cancha=[]
     menu(cancha,jugadores_en_cancha)
 
