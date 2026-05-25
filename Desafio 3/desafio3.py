@@ -2,38 +2,38 @@ FILAS = 40
 COLUMNAS = 60
 ROLES_VALIDOS  = ["arquero", "defensor", "mediocampista", "delantero"]
 EQUIPOS_VALIDOS = ["A", "B"]
-
+MAX_JUGADORES_POR_EQUIPO = 11
 ARBITRO = {
     "fila": 15,
     "columna": 30
 }
 JUGADORES = [
+    # 🔵 ARGENTINA (11 jugadores)
+    {"nombre": "Romero",      "equipo": "A", "fila": 20, "columna": 2,  "rol": "arquero",       "tiene_pelota": False},
+    {"nombre": "Molina",      "equipo": "A", "fila": 8,  "columna": 10, "rol": "defensor",       "tiene_pelota": False},
+    {"nombre": "Otamendi",    "equipo": "A", "fila": 15, "columna": 8,  "rol": "defensor",       "tiene_pelota": False},
+    {"nombre": "Lisandro",    "equipo": "A", "fila": 25, "columna": 8,  "rol": "defensor",       "tiene_pelota": False},
+    {"nombre": "Tagliafico",  "equipo": "A", "fila": 32, "columna": 10, "rol": "defensor",       "tiene_pelota": False},
+    {"nombre": "DePaul",      "equipo": "A", "fila": 10, "columna": 20, "rol": "mediocampista",  "tiene_pelota": True},
+    {"nombre": "Fernandez",   "equipo": "A", "fila": 20, "columna": 22, "rol": "mediocampista",  "tiene_pelota": False},
+    {"nombre": "MacAllister", "equipo": "A", "fila": 30, "columna": 20, "rol": "mediocampista",  "tiene_pelota": False},
+    {"nombre": "DiMaria",     "equipo": "A", "fila": 8,  "columna": 30, "rol": "delantero",      "tiene_pelota": False},
+    {"nombre": "Messi",       "equipo": "A", "fila": 20, "columna": 32, "rol": "delantero",      "tiene_pelota": False},
+    {"nombre": "Alvarez",     "equipo": "A", "fila": 32, "columna": 30, "rol": "delantero",      "tiene_pelota": False},
 
-    # 🔵 Jugador con pelota (Argentina en ataque)
-    {"nombre": "DePaul", "equipo": "A", "fila": 20, "columna": 35, "rol": "mediocampista", "tiene_pelota": True},
-
-    # 🟡 Brasil presionando cerca
-    {"nombre": "Casemiro", "equipo": "B", "fila": 20, "columna": 33, "rol": "mediocampista", "tiene_pelota": False},
-    {"nombre": "Fabinho", "equipo": "B", "fila": 18, "columna": 35, "rol": "mediocampista", "tiene_pelota": False},
-
-    # 🔵 Argentina opciones de pase cortas
-    {"nombre": "Messi", "equipo": "A", "fila": 20, "columna": 38, "rol": "delantero", "tiene_pelota": False},
-    {"nombre": "Álvarez", "equipo": "A", "fila": 22, "columna": 35, "rol": "delantero", "tiene_pelota": False},
-
-    # 🟡 Brasil cerrando líneas
-    {"nombre": "Thiago_Silva", "equipo": "B", "fila": 20, "columna": 30, "rol": "defensor", "tiene_pelota": False},
-    {"nombre": "Marquinhos", "equipo": "B", "fila": 22, "columna": 35, "rol": "defensor", "tiene_pelota": False},
-
-    # 🔵 Mediocampo Argentina apoyo
-    {"nombre": "Enzo_Fernandez", "equipo": "A", "fila": 18, "columna": 35, "rol": "mediocampista", "tiene_pelota": False},
-
-    # 🟡 Brasil presión alta
-    {"nombre": "Vinicius", "equipo": "B", "fila": 25, "columna": 35, "rol": "delantero", "tiene_pelota": False},
-
-    # 🔵 Defensa Argentina
-    {"nombre": "Otamendi", "equipo": "A", "fila": 30, "columna": 35, "rol": "defensor", "tiene_pelota": False},
+    # 🟡 BRASIL (11 jugadores)
+    {"nombre": "Alisson",     "equipo": "B", "fila": 20, "columna": 57, "rol": "arquero",        "tiene_pelota": False},
+    {"nombre": "Danilo",      "equipo": "B", "fila": 8,  "columna": 50, "rol": "defensor",       "tiene_pelota": False},
+    {"nombre": "Militao",     "equipo": "B", "fila": 15, "columna": 52, "rol": "defensor",       "tiene_pelota": False},
+    {"nombre": "Silva",       "equipo": "B", "fila": 25, "columna": 52, "rol": "defensor",       "tiene_pelota": False},
+    {"nombre": "Marquinhos",  "equipo": "B", "fila": 32, "columna": 50, "rol": "defensor",       "tiene_pelota": False},
+    {"nombre": "Casemiro",    "equipo": "B", "fila": 10, "columna": 40, "rol": "mediocampista",  "tiene_pelota": False},
+    {"nombre": "Paqueta",     "equipo": "B", "fila": 20, "columna": 38, "rol": "mediocampista",  "tiene_pelota": False},
+    {"nombre": "Gomes",       "equipo": "B", "fila": 30, "columna": 40, "rol": "mediocampista",  "tiene_pelota": False},
+    {"nombre": "Raphinha",    "equipo": "B", "fila": 8,  "columna": 33, "rol": "delantero",      "tiene_pelota": False},
+    {"nombre": "Rodrygo",     "equipo": "B", "fila": 20, "columna": 35, "rol": "delantero",      "tiene_pelota": False},
+    {"nombre": "Neymar",      "equipo": "B", "fila": 32, "columna": 33, "rol": "delantero",      "tiene_pelota": False},
 ]
-
 import random
 import os
 
@@ -312,6 +312,19 @@ def generar_cancha():
 
 
 #### REGISTRAR JUGADORES
+def equipo_completo(equipo, jugadores):
+    """Verifica si un equipo ya tiene el máximo de jugadores permitidos en cancha.
+    Args:
+        equipo (str): Equipo a verificar ('A' o 'B').
+        jugadores (list): Lista de jugadores ya registrados en cancha.
+    Returns:
+        bool: True si el equipo está completo, False si puede agregar más.
+    """
+    cantidad = 0
+    for jugador in jugadores:
+        if jugador["equipo"] == equipo:
+            cantidad += 1
+    return cantidad >= MAX_JUGADORES_POR_EQUIPO
 
 def validar_jugador(jugador, jugadores):
     """Valida que un jugador cumpla todos los requisitos para ser registrado en la cancha.
@@ -323,6 +336,10 @@ def validar_jugador(jugador, jugadores):
     Returns:
         bool: True si el jugador es válido, False si no cumple alguna condición.
     """
+    if equipo_completo(jugador["equipo"], jugadores):
+        equipo_nombre = "Argentina" if jugador["equipo"] == "A" else "Brasil"
+        mensaje_error(f"{equipo_nombre} ya tiene {MAX_JUGADORES_POR_EQUIPO} jugadores")
+        return False
     if jugador["rol"] not in ROLES_VALIDOS:
         mensaje_error(f"Rol '{jugador['rol']}' inválido")
         return False
