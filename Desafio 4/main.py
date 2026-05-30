@@ -20,7 +20,7 @@ def acercarse_pelota(posicion_pelota, posicion_robot):
 
     Args:
         posicion_pelota (x,y,z): Posición de la pelota en el espacio 
-        posicion_robot (_type_): Posición de la pelota en el espacio
+        posicion_robot (x,y,z): Posición de la pelota en el espacio
     """\
     DISTANCIA_PATADA = 0.35
     while detectar_distancia(posicion_pelota, posicion_robot) > DISTANCIA_PATADA:
