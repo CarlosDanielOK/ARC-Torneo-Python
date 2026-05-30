@@ -1,3 +1,9 @@
+def estado_robot(torso):
+    ESTADO = True
+    if torso[0] != 0 or torso[1] != 0 or torso[2] != 0 or torso[3] != 0:
+        ESTADO = False
+    return ESTADO
+
 def detectar_distancia(posicion_pelota, posicion_robot):
     dx = posicion_pelota[0] - posicion_robot[0]
     dy = posicion_pelota[1] - posicion_robot[1]
