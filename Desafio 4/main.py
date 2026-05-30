@@ -17,6 +17,15 @@ def estado_robot(torso):
     return ESTADO
 
 def detectar_distancia(posicion_pelota, posicion_robot):
+    """Calcula la distancia entre el Robot y la Pelota
+
+    Args:
+        posicion_pelota (x,y,z): Posición de la pelota en el espacio 
+        posicion_robot (x,y,z): Posición de la pelota en el espacio
+
+    Returns:
+        distancia (Int): Distancia calculada
+    """
     dx = posicion_pelota[0] - posicion_robot[0]
     dy = posicion_pelota[1] - posicion_robot[1]
     distancia = (dx**2 + dy**2) ** 0.5
@@ -29,7 +38,7 @@ def acercarse_pelota(posicion_pelota, posicion_robot):
     Args:
         posicion_pelota (x,y,z): Posición de la pelota en el espacio 
         posicion_robot (x,y,z): Posición de la pelota en el espacio
-    """\
+    """
     DISTANCIA_PATADA = 0.35
     while detectar_distancia(posicion_pelota, posicion_robot) > DISTANCIA_PATADA:
         caminar(velocidad=1.0*detectar_distancia(posicion_pelota, posicion_robot))
