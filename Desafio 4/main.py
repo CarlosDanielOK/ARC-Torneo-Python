@@ -2,7 +2,15 @@
 
 
 
-def estado_robot(torso): #Suponemos que estado_torso devuelve una tupla de numeros, y 0 significa que esta todo en su posicion original.
+def estado_robot(torso):
+    """
+    Devuelve esl estado del robot
+     #Suponemos que estado_torso devuelve una tupla de numeros, y 0 significa que esta todo en su posicion original.
+
+    Args:
+        torso : Estado del torso del robot
+    """
+
     ESTADO = True
     if torso[0] != 0 or torso[1] != 0 or torso[2] != 0 or torso[3] != 0:
         ESTADO = False
@@ -39,6 +47,9 @@ def patear_pelota():
 
 
 def main():
+    """
+    cotrola la estabilidad del robot y ejecuta la logica 
+    """
     while estado_robot(estado_torso()):
         detectar_distancia(posicion_pelota, posicion_robot)
         acercarse_pelota(posicion_pelota, posicion_robot)
