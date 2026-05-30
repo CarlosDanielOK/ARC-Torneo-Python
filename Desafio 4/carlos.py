@@ -7,14 +7,14 @@ def calcular_distancia_y_decidir(posicion_robot, posicion_pelota, fase_actual):
     Recibe las posiciones (Tarea 2 y 3) y la fase actual.
     Devuelve la nueva_fase y la distancia calculada.
     """
-    # 1. Calculamos la diferencia en los ejes X e Y (ignoramos Z que es la altura)
+    # Calcula la diferencia en los ejes X e Y (ignora Z que es la altura)
     dx = posicion_pelota[0] - posicion_robot[0]
     dy = posicion_pelota[1] - posicion_robot[1]
 
     # Teorema de Pitágoras para la distancia horizontal
     distancia = (dx**2 + dy**2) ** 0.5
 
-    # 2. Toma de decisión basada en la distancia
+    # Toma de decisión basada en la distancia
     nueva_fase = fase_actual
 
     # Solo decidimos acercarnos o pararnos si estamos en la fase de búsqueda/aproximación
