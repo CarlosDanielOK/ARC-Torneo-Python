@@ -1,11 +1,8 @@
-
-
-
-
 def estado_robot(torso):
     """
     Devuelve esl estado del robot
-     #Suponemos que estado_torso devuelve una tupla de numeros, y 0 significa que esta todo en su posicion original.
+     
+    Suponemos que estado_torso devuelve una tupla de numeros, y 0 significa que esta todo en su posicion original.
 
     Args:
         torso : Estado del torso del robot
@@ -48,8 +45,10 @@ def patear_pelota():
     '''
         Prepara al robot para patear a la pelota
         se pestabiliza luego de ejecutar la patada
+
+        Suponemos que los negativos son izquierda y numeros positivos son a derecha
     '''
-    inclinarse(adelante=1.0, izquierda=0.5)
+    inclinarse(adelante=1.0, lateral=-0.5)
     preparar_patada(pierna='derecha', fuerza=1.0)
     patear(pierna='derecha', potencia=1.0)
     pararse() 
