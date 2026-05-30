@@ -1,3 +1,7 @@
+
+
+
+
 def estado_robot(torso): #Suponemos que estado_torso devuelve una tupla de numeros, y 0 significa que esta todo en su posicion original.
     ESTADO = True
     if torso[0] != 0 or torso[1] != 0 or torso[2] != 0 or torso[3] != 0:
@@ -11,12 +15,23 @@ def detectar_distancia(posicion_pelota, posicion_robot):
     return distancia
 
 def acercarse_pelota(posicion_pelota, posicion_robot):
+    """Mientras la distancia sea mayor que la DISTANCIA_PATADA elegido, se deberá llamar a caminar(velocidad). 
+        - velocidad incrementa segun la distancia entre la pelota y el robot
+
+    Args:
+        posicion_pelota (x,y,z): Posición de la pelota en el espacio 
+        posicion_robot (_type_): Posición de la pelota en el espacio
+    """\
     DISTANCIA_PATADA = 0.35
     while detectar_distancia(posicion_pelota, posicion_robot) > DISTANCIA_PATADA:
         caminar(velocidad=1.0*detectar_distancia(posicion_pelota, posicion_robot))
     pararse()
 
 def patear_pelota():
+    '''
+        Prepara al robot para patear a la pelota
+        se pestabiliza luego de ejecutar la patada
+    '''
     inclinarse(adelante=1.0, izquierda=0.5)
     preparar_patada(pierna='derecha', fuerza=1.0)
     patear(pierna='derecha', potencia=1.0)
@@ -28,4 +43,5 @@ def main():
         detectar_distancia(posicion_pelota, posicion_robot)
         acercarse_pelota(posicion_pelota, posicion_robot)
         patear_pelota()
+    pararse()
     main()
