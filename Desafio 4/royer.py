@@ -1,5 +1,5 @@
-FILA = 40
-COLUMNA =60
+FILAS = 30
+COLUMNAS =50
 import random
 
 def generar_cancha():
@@ -28,18 +28,15 @@ def posicionarRobot(cancha):
 def mostrar_celda(celda):
     """Devuelve la representación visual con color ANSI de una celda de la cancha.
     Args:
-        celda (str): Contenido de la celda ('A', 'B', 'X' o '.').
+        celda (str): Contenido de la celda ('X' o '.').
     Returns:
         str: Cadena con código de color ANSI y el carácter de la celda.
     """
-    if celda == "A":
-        return "\033[94mA\033[0m"   # azul - Argentina
-    elif celda == "B":
-        return "\033[93mB\033[0m"   # amarillo - Brasil  
-    elif celda == "X":
+    if celda == "R":
         return "\033[91mX\033[0m"   # rojo - obstáculo
     else:
         return "."
+    
 def mostrar_cancha(cancha):
     """Muestra la cancha en consola con coordenadas de filas y columnas y colores por celda.
     Args:
@@ -58,7 +55,7 @@ def mostrar_cancha(cancha):
 def main():
     """Punto de entrada del programa. Genera la cancha vacía e inicia el menú principal."""
     cancha = generar_cancha()
-    mostrar_cancha()
+    mostrar_cancha(cancha)
 
 if __name__ == "__main__":
     main()
