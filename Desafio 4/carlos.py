@@ -3,7 +3,6 @@ DISTANCIA_PATADA = 0.35  # Distancia umbral en metros
 
 def calcular_distancia_y_decidir(posicion_robot, posicion_pelota, fase_actual):
     """
-    Función que resuelve la Tarea 4.
     Recibe las posiciones (Tarea 2 y 3) y la fase actual.
     Devuelve la nueva_fase y la distancia calculada.
     """
